@@ -13,6 +13,9 @@ public class ValidatorFactory {
     
     public enum TYPE{
         Activity_Master,
+        Activity_Member,
+        Activity_Town,
+        Activity_Vehicle,
         Inquiry_Master,
         Inquiry_Vehicle_Priority,
         Inquiry_Promo,
@@ -31,6 +34,12 @@ public class ValidatorFactory {
         switch (foType) {
             case Activity_Master:
                 return new Validator_Activity_Master(foValue);
+            case Activity_Member:
+                return new Validator_Activity_Member(foValue);
+            case Activity_Town:
+                return new Validator_Activity_Town(foValue);
+            case Activity_Vehicle:
+                return new Validator_Activity_Vehicle(foValue);
             case Inquiry_Master:
                 return new Validator_Inquiry_Master(foValue);
             case Inquiry_Vehicle_Priority:
