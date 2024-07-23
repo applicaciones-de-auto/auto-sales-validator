@@ -6,20 +6,20 @@
 package org.guanzon.auto.validator.sales;
 
 import org.guanzon.appdriver.base.GRider;
-import org.guanzon.auto.model.sales.Model_Activity_Town;
+import org.guanzon.auto.model.sales.Model_Activity_Location;
 
 /**
  *
  * @author Arsiela
  */
-public class Validator_Activity_Town  implements ValidatorInterface {
+public class Validator_Activity_Location  implements ValidatorInterface {
     GRider poGRider;
     String psMessage;
     
-    Model_Activity_Town poEntity;
+    Model_Activity_Location poEntity;
     
-    public Validator_Activity_Town(Object foValue){
-        poEntity = (Model_Activity_Town) foValue;
+    public Validator_Activity_Location(Object foValue){
+        poEntity = (Model_Activity_Location) foValue;
     }
     
     @Override
@@ -29,6 +29,16 @@ public class Validator_Activity_Town  implements ValidatorInterface {
 
     @Override
     public boolean isEntryOkay() {
+        
+        if(poEntity.getProvID() == null) {
+            psMessage = "Activity Province is not set.";
+            return false;
+        } else {
+            if (poEntity.getProvID().trim().isEmpty()){
+                psMessage = "Activity Province is not set.";
+                return false;
+            }
+        }
         
         if(poEntity.getTownID()== null){
             psMessage = "Town ID cannot be Empty.";

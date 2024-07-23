@@ -5,16 +5,10 @@
  */
 package org.guanzon.auto.validator.sales;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.guanzon.appdriver.base.GRider;
-import org.guanzon.appdriver.base.MiscUtil;
-import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.auto.model.sales.Model_Activity_Master;
 
 /**
@@ -108,16 +102,6 @@ public class Validator_Activity_Master implements ValidatorInterface {
             } else {
                 if (poEntity.getActTypID().trim().isEmpty()){
                     psMessage = "Activity Type ID is not set.";
-                    return false;
-                }
-            }
-            
-            if(poEntity.getProvID() == null) {
-                psMessage = "Activity Province is not set.";
-                return false;
-            } else {
-                if (poEntity.getProvID().trim().isEmpty()){
-                    psMessage = "Activity Province is not set.";
                     return false;
                 }
             }
