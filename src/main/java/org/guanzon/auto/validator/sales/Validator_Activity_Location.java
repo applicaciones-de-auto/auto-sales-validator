@@ -50,6 +50,21 @@ public class Validator_Activity_Location  implements ValidatorInterface {
             }
         }
         
+        if(poEntity.getBrgyID()== null){
+            psMessage = "Barangay ID cannot be Empty.";
+            return false;
+        } else {
+            if(poEntity.getBrgyID().trim().isEmpty()){
+                psMessage = "Barangay ID cannot be Empty.";
+                return false;
+            }
+        }
+        
+        if(poEntity.getEntryNo() == 0){
+            psMessage = "Invalid Entry Number.";
+            return false;
+        }
+        
         return true;
     }
 
