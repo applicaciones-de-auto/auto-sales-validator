@@ -5,10 +5,19 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.guanzon.appdriver.base.GRider;
+import org.guanzon.appdriver.base.MiscUtil;
+import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.auto.model.sales.Model_Activity_Master;
 
 /**
@@ -33,8 +42,7 @@ public class Validator_Activity_Master implements ValidatorInterface {
 
     @Override
     public boolean isEntryOkay() {
-//        try {
-            String lsSQL = "";
+        try {
 
             if(poEntity.getActvtyID()== null) {
                 psMessage = "Activity ID is not set.";
@@ -116,16 +124,6 @@ public class Validator_Activity_Master implements ValidatorInterface {
                 }
             }
             
-            if(poEntity.getCompnyn() == null) {
-                psMessage = "Activity Company is not set.";
-                return false;
-            } else {
-                if (poEntity.getCompnyn().trim().isEmpty()){
-                    psMessage = "Activity Company is not set.";
-                    return false;
-                }
-            }
-            
             if(poEntity.getTrgtClnt() == null) {
                 psMessage = "Target Client is not set.";
                 return false;
@@ -194,27 +192,114 @@ public class Validator_Activity_Master implements ValidatorInterface {
             Date date = (Date) poEntity.getValue("dDateFrom");
             System.out.println(date);
             
-            if(date == dateOld || String.valueOf(date).equals(String.valueOf(dateOld)) || String.valueOf(date).equals("Mon Jan 01 00:00:00 CST 1900")){
+            if(date == null){
                 psMessage = "Invalid Start Date.";
                 return false;
-            } 
+            } else {
+                if("1900-01-01".equals(xsDateShort(date))){
+                    psMessage = "Invalid Start Date.";
+                    return false;
+                }
+            }
             
             date = (Date) poEntity.getValue("dDateThru");
-            if(date == dateOld || String.valueOf(date).equals(String.valueOf(dateOld)) || String.valueOf(date).equals("Mon Jan 01 00:00:00 CST 1900")){
-                psMessage = "Invalid End Date.";
+            if(date == null){
+                psMessage = "Invalid Start Date.";
+                return false;
+            } else {
+                if("1900-01-01".equals(xsDateShort(date))){
+                    psMessage = "Invalid End Date.";
+                    return false;
+                }
+            }
+            
+            LocalDate ldteFrom = strToDate(xsDateShort((Date) poEntity.getValue("dDateFrom")));
+            LocalDate ldteThru =  strToDate(xsDateShort((Date) poEntity.getValue("dDateThru")));
+            Period age = Period.between(ldteFrom, ldteThru);
+            if(age.getDays() < 0){
+                psMessage = "Invalid Activity Date.";
                 return false;
             }
             
+//            if(date == dateOld || String.valueOf(date).equals(String.valueOf(dateOld)) || String.valueOf(date).equals("Mon Jan 01 00:00:00 CST 1900")){
+//                psMessage = "Invalid Start Date.";
+//                return false;
+//            } 
+//            
+//            
+//            if(date == dateOld || String.valueOf(date).equals(String.valueOf(dateOld)) || String.valueOf(date).equals("Mon Jan 01 00:00:00 CST 1900")){
+//                psMessage = "Invalid End Date.";
+//                return false;
+//            }
+            
+
+            String lsID = "";
+            String lsDesc  = "";
+            String lsSQL =    "   SELECT "                                                  
+                            + "   a.sActvtyID "                                             
+                            + " , a.sActNoxxx "                                             
+                            + " , a.sActTitle "                                             
+                            + " , a.sActTypID "                                              
+                            + " , a.dDateFrom "                                             
+                            + " , a.dDateThru "                                             
+                            + " , a.sLocation "                                             
+                            + " , a.cTranStat "                                             
+//                            + " , b.sBrgyIDxx "                                             
+//                            + " , b.sTownIDxx "                                             
+                            + "FROM activity_master a "   ;                                  
+//                            + "LEFT JOIN activity_location b ON b.sTransNox = a.sActvtyID ";
+            lsSQL = MiscUtil.addCondition(lsSQL, " REPLACE(a.sActTitle,' ','') = " + SQLUtil.toSQL(poEntity.getActTitle().replace(" ",""))) +
+                                                    " AND a.sActTypID = " + SQLUtil.toSQL(poEntity.getActTypID()) +
+                                                    " AND a.dDateFrom = " + SQLUtil.toSQL(xsDateShort((Date) poEntity.getValue("dDateFrom")))+
+                                                    " AND a.dDateThru = " + SQLUtil.toSQL(xsDateShort((Date) poEntity.getValue("dDateThru")))+
+                                                    " AND a.sLocation = " + SQLUtil.toSQL(poEntity.getLocation())+
+                                                    " AND a.cTranStat = '1' " +
+                                                    " AND a.sActvtyID <> " + SQLUtil.toSQL(poEntity.getActvtyID()) ;
+            System.out.println("EXISTING ACTIVITY CHECK: " + lsSQL);
+            ResultSet loRS = poGRider.executeQuery(lsSQL);
+
+            if (MiscUtil.RecordCount(loRS) > 0){
+                    while(loRS.next()){
+                        lsID = loRS.getString("sActvtyID");
+                        lsDesc = loRS.getString("sActTitle");
+                    }
+                    
+                    MiscUtil.close(loRS);
+                    psMessage = "Existing Activity Record.\n\nActivity ID: " + lsID + "\nActivity Title: " + lsDesc.toUpperCase();
+                    return false;
+            }
+            
         
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Validator_Activity_Master.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        } catch (SQLException ex) {
+            Logger.getLogger(Validator_Activity_Master.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return true;
     }
 
     @Override
     public String getMessage() {
         return psMessage;
+    }
+    
+    public static String xsDateShort(Date fdValue) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(fdValue);
+        return date;
+    }
+
+    public static String xsDateShort(String fsValue) throws org.json.simple.parser.ParseException, java.text.ParseException {
+        SimpleDateFormat fromUser = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String lsResult = "";
+        lsResult = myFormat.format(fromUser.parse(fsValue));
+        return lsResult;
+    }
+    
+    /*Convert Date to String*/
+    private LocalDate strToDate(String val) {
+        DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(val, date_formatter);
+        return localDate;
     }
     
 }
