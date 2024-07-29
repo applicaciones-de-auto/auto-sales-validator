@@ -47,6 +47,11 @@ public class Validator_Activity_Member implements ValidatorInterface {
             }
         }
         
+        if(poEntity.getEntryNo() == 0){
+            psMessage = "Invalid Entry Number.";
+            return false;
+        }
+        
         return true;
     }
 
