@@ -1,15 +1,18 @@
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Promo.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Vehicle_Priority.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_BankApplication.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Requiremets.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Reservation.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Finance.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Activity_Master.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Labor.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\ValidatorInterface.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Master.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleDeliveryReceipt_Master.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_FollowUp.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Master.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Parts.java
-D:\MAVEN\Integrated Automotive System\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\ValidatorFactory.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Activity_Vehicle.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\ValidatorFactory.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_BankApplication.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\ValidatorInterface.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Activity_Location.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleDeliveryReceipt_Master.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Master.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_FollowUp.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Master.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Requiremets.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Vehicle_Priority.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Parts.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Labor.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Finance.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Activity_Master.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Promo.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Inquiry_Reservation.java
+D:\Guanzon\GMC SEG Folder - Maven\auto-sales-validator\src\main\java\org\guanzon\auto\validator\sales\Validator_Activity_Member.java
