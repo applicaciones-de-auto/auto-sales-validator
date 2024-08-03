@@ -204,7 +204,7 @@ public class Validator_Activity_Master implements ValidatorInterface {
             
             date = (Date) poEntity.getValue("dDateThru");
             if(date == null){
-                psMessage = "Invalid Start Date.";
+                psMessage = "Invalid End Date.";
                 return false;
             } else {
                 if("1900-01-01".equals(xsDateShort(date))){
@@ -339,13 +339,13 @@ public class Validator_Activity_Master implements ValidatorInterface {
         return psMessage;
     }
     
-    public static String xsDateShort(Date fdValue) {
+    private static String xsDateShort(Date fdValue) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(fdValue);
         return date;
     }
 
-    public static String xsDateShort(String fsValue) throws org.json.simple.parser.ParseException, java.text.ParseException {
+    private static String xsDateShort(String fsValue) throws org.json.simple.parser.ParseException, java.text.ParseException {
         SimpleDateFormat fromUser = new SimpleDateFormat("MMMM dd, yyyy");
         SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
         String lsResult = "";
