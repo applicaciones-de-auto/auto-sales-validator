@@ -212,7 +212,6 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                             + "  , a.dTransact "                                                               
                             + "  , a.sEmployID "                                                               
                             + "  , a.sClientID "                                                               
-                            + "  , a.sAddrssID "                                                               
                             + "  , a.sContctID "                                                               
                             + "  , a.sAgentIDx "                                                               
                             + "  , a.dTargetDt "                                                               

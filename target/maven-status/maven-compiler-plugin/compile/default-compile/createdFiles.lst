@@ -1,12 +1,9 @@
 org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Parts.class
 org\guanzon\auto\validator\sales\Validator_Activity_Location.class
 org\guanzon\auto\validator\sales\Validator_Inquiry_Reservation.class
-org\guanzon\auto\validator\sales\Validator_Inquiry_Promo.class
-org\guanzon\auto\validator\sales\Validator_Activity_Vehicle.class
 org\guanzon\auto\validator\sales\Validator_VehicleSalesProposal_Finance.class
 org\guanzon\auto\validator\sales\ValidatorFactory.class
 org\guanzon\auto\validator\sales\ValidatorFactory$TYPE.class
-org\guanzon\auto\validator\sales\Validator_Inquiry_Vehicle_Priority.class
 org\guanzon\auto\validator\sales\Validator_VehicleDeliveryReceipt_Master.class
 org\guanzon\auto\validator\sales\Validator_Inquiry_BankApplication.class
 org\guanzon\auto\validator\sales\ValidatorInterface.class
