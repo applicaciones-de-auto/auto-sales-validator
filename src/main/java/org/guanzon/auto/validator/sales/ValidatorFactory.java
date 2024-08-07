@@ -19,7 +19,7 @@ public class ValidatorFactory {
         Inquiry_Master,
         Inquiry_Vehicle_Priority,
         Inquiry_Promo,
-        Inquiry_Requiremets,
+        Inquiry_Requirements,
         Inquiry_Reservation,
         Inquiry_BankApplication,
         Inquiry_FollowUp,
@@ -46,8 +46,8 @@ public class ValidatorFactory {
                 return new Validator_Inquiry_Vehicle_Priority(foValue);
             case Inquiry_Promo:
                 return new Validator_Inquiry_Promo(foValue);
-            case Inquiry_Requiremets:
-                return new Validator_Inquiry_Requiremets(foValue);
+            case Inquiry_Requirements:
+                return new Validator_Inquiry_Requirements(foValue);
             case Inquiry_Reservation:
                 return new Validator_Inquiry_Reservation(foValue);
             case Inquiry_BankApplication:
