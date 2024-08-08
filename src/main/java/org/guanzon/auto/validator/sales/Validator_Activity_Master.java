@@ -204,7 +204,7 @@ public class Validator_Activity_Master implements ValidatorInterface {
             
             date = (Date) poEntity.getValue("dDateThru");
             if(date == null){
-                psMessage = "Invalid Start Date.";
+                psMessage = "Invalid End Date.";
                 return false;
             } else {
                 if("1900-01-01".equals(xsDateShort(date))){
@@ -232,7 +232,6 @@ public class Validator_Activity_Master implements ValidatorInterface {
 //                return false;
 //            }
             
-
             String lsID = "";
             String lsDesc  = "";
             String lsSQL =    "   SELECT "                                                  
@@ -269,8 +268,67 @@ public class Validator_Activity_Master implements ValidatorInterface {
                     return false;
             }
             
-        
+            
+            //Cancellation Validation
+            if(poEntity.getTranStat().equals("2")){
+                /* check if already LINKED with OTHER FORMS */
+                //Inquiry
+                lsID = "";
+                lsDesc = "";
+                lsSQL =   " SELECT "                                                   
+                        + "   a.sTransNox "                                            
+                        + " , a.dTransact "                                            
+                        + " , a.sActvtyID "                                            
+                        + " FROM customer_inquiry a "                                  
+                        + " LEFT JOIN activity_master b ON b.sActvtyID = a.sActvtyID ";
+                lsSQL = MiscUtil.addCondition(lsSQL, " a.sActvtyID = " + SQLUtil.toSQL(poEntity.getActvtyID())) ;
+                System.out.println("EXISTING ACTIVITY LINKED THRU INQUIRY CHECK: " + lsSQL);
+                loRS = poGRider.executeQuery(lsSQL);
+
+                if (MiscUtil.RecordCount(loRS) > 0){
+                        while(loRS.next()){
+                            lsID = loRS.getString("sTransNox");
+                            lsDesc = xsDateShort(loRS.getString("dTransact"));
+                        }
+
+                        MiscUtil.close(loRS);
+                        psMessage = "Unable to cancel Activity. It has already been used for inquiry!\n\nInquiry ID: " + lsID + "\nInquiry Date:" + lsDesc ;
+                        return false;
+                }
+                //JO / Diagnostic
+                lsID = "";
+                lsSQL =   " SELECT "                                                   
+                        + "   a.sTransNox "                                            
+                        + " , a.dTransact "                                            
+                        + " , a.sActvtyID "                                            
+                        + " FROM customer_inquiry a "                                  
+                        + " LEFT JOIN diagnostic_master b ON b.sActvtyID = a.sActvtyID ";
+                lsSQL = MiscUtil.addCondition(lsSQL, " a.sActvtyID = " + SQLUtil.toSQL(poEntity.getActvtyID())) ;
+                System.out.println("EXISTING ACTIVITY LINKED THRU JOB ORDER CHECK: " + lsSQL);
+                loRS = poGRider.executeQuery(lsSQL);
+
+                if (MiscUtil.RecordCount(loRS) > 0){
+                        while(loRS.next()){
+                            lsID = loRS.getString("sTransNox");
+                            lsDesc = xsDateShort(loRS.getString("dTransact"));
+                        }
+
+                        MiscUtil.close(loRS);
+                        psMessage = "Unable to cancel Activity. It has already been used for job order!\n\nJO NO: " + lsID + "\nJO Date:" + lsDesc ;
+                        return false;
+                }
+                //PRS
+                
+                //Accounting
+                
+                
+            }
+            
         } catch (SQLException ex) {
+            Logger.getLogger(Validator_Activity_Master.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(Validator_Activity_Master.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(Validator_Activity_Master.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
@@ -281,13 +339,13 @@ public class Validator_Activity_Master implements ValidatorInterface {
         return psMessage;
     }
     
-    public static String xsDateShort(Date fdValue) {
+    private static String xsDateShort(Date fdValue) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(fdValue);
         return date;
     }
 
-    public static String xsDateShort(String fsValue) throws org.json.simple.parser.ParseException, java.text.ParseException {
+    private static String xsDateShort(String fsValue) throws org.json.simple.parser.ParseException, java.text.ParseException {
         SimpleDateFormat fromUser = new SimpleDateFormat("MMMM dd, yyyy");
         SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
         String lsResult = "";

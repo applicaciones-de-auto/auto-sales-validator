@@ -6,20 +6,20 @@
 package org.guanzon.auto.validator.sales;
 
 import org.guanzon.appdriver.base.GRider;
-import org.guanzon.auto.model.sales.Model_Inquiry_VehiclePriority;
+import org.guanzon.auto.model.sales.Model_Inquiry_Requirements;
 
 /**
  *
  * @author Arsiela
  */
-public class Validator_Inquiry_Vehicle_Priority implements ValidatorInterface {
+public class Validator_Inquiry_Requirements implements ValidatorInterface {
     GRider poGRider;
     String psMessage;
     
-    Model_Inquiry_VehiclePriority poEntity;
+    Model_Inquiry_Requirements poEntity;
 
-    Validator_Inquiry_Vehicle_Priority(Object foValue){
-        poEntity = (Model_Inquiry_VehiclePriority) foValue;
+    public Validator_Inquiry_Requirements(Object foValue) {
+        poEntity = (Model_Inquiry_Requirements) foValue;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class Validator_Inquiry_Vehicle_Priority implements ValidatorInterface {
             }
         }
         
-        if(poEntity.getVhclID()== null) {
-            psMessage = "Vehicle ID is not set.";
+        if(poEntity.getRqrmtCde()== null) {
+            psMessage = "Requirement Code is not set.";
             return false;
         } else {
-            if (poEntity.getVhclID().isEmpty()){
-                psMessage = "Vehicle ID is not set.";
+            if (poEntity.getRqrmtCde().isEmpty()){
+                psMessage = "Requirement Code is not set.";
                 return false;
             }
         }
@@ -56,5 +56,4 @@ public class Validator_Inquiry_Vehicle_Priority implements ValidatorInterface {
     public String getMessage() {
         return psMessage;
     }
-    
 }
