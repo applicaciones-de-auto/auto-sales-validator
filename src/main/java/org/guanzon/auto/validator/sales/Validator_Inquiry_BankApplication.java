@@ -5,9 +5,16 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.guanzon.appdriver.base.GRider;
+import org.guanzon.appdriver.base.MiscUtil;
+import org.guanzon.appdriver.base.SQLUtil;
+import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.auto.model.sales.Model_Bank_Application;
 
 /**
@@ -84,6 +91,31 @@ public class Validator_Inquiry_BankApplication implements ValidatorInterface {
                 }
             }
         }
+        
+        try {
+            String lsID = "";
+            String lsSQL = poEntity.getSQL();
+
+            if(poEntity.getEditMode() == EditMode.ADDNEW){
+                lsSQL = MiscUtil.addCondition(lsSQL, " a.sApplicNo = " + SQLUtil.toSQL(poEntity.getApplicNo())) ;
+                System.out.println("EXISTING BANK APPLICATION CHECK: " + lsSQL);
+                ResultSet loRS = poGRider.executeQuery(lsSQL);
+
+                if (MiscUtil.RecordCount(loRS) > 0){
+                        while(loRS.next()){
+                            lsID = loRS.getString("sApplicNo");
+                        }
+
+                        MiscUtil.close(loRS);
+                        psMessage = "Existing Bank Application Number. Saving aborted." ;
+                        return false;
+                }      
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Validator_Inquiry_BankApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          
         
         return true;
     }
