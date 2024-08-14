@@ -5,6 +5,7 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.guanzon.appdriver.base.GRider;
@@ -73,12 +74,27 @@ public class Validator_Inquiry_FollowUp implements ValidatorInterface {
             }
         }
         
+        if(poEntity.getFollowUpTme() == null) {
+            psMessage = "Invalid Next Follow Up Time.";
+            return false;
+        } else {
+            if (poEntity.getFollowUpTme().equals(Time.valueOf("00:00:00"))){
+                psMessage = "Invalid Next Follow Up Time.";
+                return false;
+            }
+        }
+        
+        if(xsDateShort((Date) poEntity.getValue("dFollowUp")).equals(xsDateShort((Date) poEntity.getValue("dTransact")))){
+            psMessage = "Follow Up date cannot be the same with next follow up date.";
+            return false;
+        }
+        
         if(poEntity.getEmployID()== null) {
             psMessage = "Employee is not set.";
             return false;
         } else {
             if (poEntity.getEmployID().isEmpty()){
-                psMessage = "Employee Status is not set.";
+                psMessage = "Employee is not set.";
                 return false;
             }
         }

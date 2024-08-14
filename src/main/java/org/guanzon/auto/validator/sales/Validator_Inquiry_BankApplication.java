@@ -96,21 +96,21 @@ public class Validator_Inquiry_BankApplication implements ValidatorInterface {
             String lsID = "";
             String lsSQL = poEntity.getSQL();
 
-            if(poEntity.getEditMode() == EditMode.ADDNEW){
-                lsSQL = MiscUtil.addCondition(lsSQL, " a.sApplicNo = " + SQLUtil.toSQL(poEntity.getApplicNo())) ;
-                System.out.println("EXISTING BANK APPLICATION CHECK: " + lsSQL);
-                ResultSet loRS = poGRider.executeQuery(lsSQL);
+            lsSQL = MiscUtil.addCondition(lsSQL, " a.sApplicNo = " + SQLUtil.toSQL(poEntity.getApplicNo())
+                                                    +" AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo())) ;
+            System.out.println("EXISTING BANK APPLICATION CHECK: " + lsSQL);
+            ResultSet loRS = poGRider.executeQuery(lsSQL);
 
-                if (MiscUtil.RecordCount(loRS) > 0){
-                        while(loRS.next()){
-                            lsID = loRS.getString("sApplicNo");
-                        }
+            if (MiscUtil.RecordCount(loRS) > 0){
+                    while(loRS.next()){
+                        lsID = loRS.getString("sApplicNo");
+                    }
 
-                        MiscUtil.close(loRS);
-                        psMessage = "Existing Bank Application Number. Saving aborted." ;
-                        return false;
-                }      
-            }
+                    MiscUtil.close(loRS);
+                    psMessage = "Existing Bank Application Number. Saving aborted." ;
+                    return false;
+            }      
+            
             
         } catch (SQLException ex) {
             Logger.getLogger(Validator_Inquiry_BankApplication.class.getName()).log(Level.SEVERE, null, ex);
