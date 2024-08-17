@@ -8,6 +8,9 @@ package org.guanzon.auto.validator.sales;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +61,26 @@ public class Validator_Inquiry_BankApplication implements ValidatorInterface {
             }
         }
         
+        if(poEntity.getBrBankID()== null) {
+            psMessage = "Bank is not set.";
+            return false;
+        } else {
+            if (poEntity.getBrBankID().isEmpty()){
+                psMessage = "Bank is not set.";
+                return false;
+            }
+        }
+        
+        if(poEntity.getPayMode() == null) {
+            psMessage = "Payment Mode is not set.";
+            return false;
+        } else {
+            if (poEntity.getPayMode().isEmpty()){
+                psMessage = "Payment Mode is not set.";
+                return false;
+            }
+        }
+        
         Date date = (Date) poEntity.getValue("dAppliedx");
         if(date == null){
             psMessage = "Invalid Applied Date.";
@@ -88,6 +111,15 @@ public class Validator_Inquiry_BankApplication implements ValidatorInterface {
                 if("1900-01-01".equals(xsDateShort(date))){
                     psMessage = "Invalid Approve Date.";
                     return false;
+                } else {
+                    LocalDate ldteAppl = strToDate(xsDateShort((Date) poEntity.getValue("dAppliedx")));
+                    LocalDate ldteApp =  strToDate(xsDateShort((Date) poEntity.getValue("dApproved")));
+                    Period age = Period.between(ldteAppl, ldteApp);
+                    if(age.getDays() < 0){
+                        psMessage = "Invalid Approve Date.";
+                        return false;
+                    }
+                    
                 }
             }
         }
@@ -109,15 +141,45 @@ public class Validator_Inquiry_BankApplication implements ValidatorInterface {
                     MiscUtil.close(loRS);
                     psMessage = "Existing Bank Application Number. Saving aborted." ;
                     return false;
-            }      
+            } 
             
-            
+            if(poEntity.getCancelld() != null){
+                if(poEntity.getCancelld().trim().isEmpty()){
+                    lsID = "";
+                    lsSQL = poEntity.getSQL();
+
+                    lsSQL = MiscUtil.addCondition(lsSQL, "  (a.sCancelld = '' OR a.sCancelld = NULL) "
+                                                            + " AND a.sBrBankID = " + SQLUtil.toSQL(poEntity.getBrBankID())
+                                                            + " AND a.cPayModex = " + SQLUtil.toSQL(poEntity.getPayMode())
+                                                            + " AND a.sSourceNo = " + SQLUtil.toSQL(poEntity.getSourceNo())
+                                                            +" AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo())) ;
+                    System.out.println("EXISTING BANK APPLICATION CHECK: " + lsSQL);
+                    loRS = poGRider.executeQuery(lsSQL);
+
+                    if (MiscUtil.RecordCount(loRS) > 0){
+                            while(loRS.next()){
+                                lsID = loRS.getString("sApplicNo");
+                            }
+
+                            MiscUtil.close(loRS);
+                            psMessage = "Existing Bank Application for "+poEntity.getBankName()+". Saving aborted." ;
+                            return false;
+                    }  
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Validator_Inquiry_BankApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
           
         
         return true;
+    }
+    
+    /*Convert Date to String*/
+    private LocalDate strToDate(String val) {
+        DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(val, date_formatter);
+        return localDate;
     }
     
     private static String xsDateShort(Date fdValue) {
