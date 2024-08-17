@@ -200,11 +200,13 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
             }
         }
         
-        
         try {
             String lsID = "";
             String lsDesc = "";
+            String lsStat = "";
+            String lsEmpl = "";
             String lsSQL = "";
+            String lsWhere = "";
             if(poEntity.getEditMode() == EditMode.ADDNEW){
                 lsSQL =   " SELECT "                                                                       
                             + "    a.sTransNox "                                                               
@@ -220,8 +222,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                             + " 	WHEN a.cTranStat = '1' THEN 'ON PROCESS' "                                   
                             + " 	WHEN a.cTranStat = '2' THEN 'LOST SALE'  "                                   
                             + " 	WHEN a.cTranStat = '3' THEN 'VSP'        "                                   
-                            + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                   
-                            + " 	WHEN a.cTranStat = '5' THEN 'RETIRED'    "                                   
+                            + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                     
                             + " 	ELSE 'CANCELLED'  "                                                          
                             + "    END AS sTranStat "                                                          
                             + "  , b.sCompnyNm      "                                                          
@@ -245,26 +246,52 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                             + " LEFT JOIN ggc_isysdbf.client_master l ON l.sClientID = a.sEmployID "            
                             + " LEFT JOIN client_master m ON m.sClientID = a.sAgentIDx "                        
                             + " LEFT JOIN branch p ON p.sBranchCd = a.sBranchCd "                        
-                            + " WHERE a.cTranStat <> '6' " ;
+                            + " WHERE a.cTranStat <> '5' " ;
 
-                lsSQL = MiscUtil.addCondition(lsSQL, " a.sClientID = " + SQLUtil.toSQL(poEntity.getClientID()) 
-                                                        //+ " AND a.sEmployID = " + SQLUtil.toSQL(poEntity.getEmployID()) 
-                                                        + " AND (a.cTranStat = '0' OR a.cTranStat = '1')" 
+                lsWhere = MiscUtil.addCondition(lsSQL, " a.sClientID = " + SQLUtil.toSQL(poEntity.getClientID()) 
+                                                        + " AND a.sEmployID = " + SQLUtil.toSQL(poEntity.getEmployID()) 
+                                                        + " AND (a.cTranStat = '0' OR a.cTranStat = '3' OR a.cTranStat = '1')" 
                                                         );
-                System.out.println("EXISTING INQUIRY FOR-FOLLOWUP, ON PROCESS OR RETIRED CHECK: " + lsSQL);
-                ResultSet loRS = poGRider.executeQuery(lsSQL);
-
+                System.out.println("EXISTING INQUIRY FOR-FOLLOWUP, ON PROCESS, VSP WITH THE SAME SE CHECK: " + lsSQL);
+                ResultSet loRS = poGRider.executeQuery(lsWhere);
+                //Check for existing inquiry with same SE
                 if (MiscUtil.RecordCount(loRS) > 0){
                     while(loRS.next()){
                         lsID = loRS.getString("sTransNox");
                         lsDesc = loRS.getString("sCompnyNm");
                     }
-
+                    
                     MiscUtil.close(loRS);
-
-                    psMessage = "Found an existing inquiry record for\n" + lsDesc.toUpperCase() + " <Inquiry ID:" + lsID + ">\n\n Do you want to view the record?";
+                    psMessage = "Found an existing inquiry record for\n" + lsDesc.toUpperCase() + " <Inquiry ID:" + lsID + ">";
+                    //psMessage = "Found an existing inquiry record for\n" + lsDesc.toUpperCase() + " <Inquiry ID:" + lsID + ">\n\n Do you want to view the record?";
                     return false;
                 } 
+                
+                
+                lsWhere = MiscUtil.addCondition(lsSQL, " a.sClientID = " + SQLUtil.toSQL(poEntity.getClientID()) 
+                                                        + " AND a.sEmployID <> " + SQLUtil.toSQL(poEntity.getEmployID()) 
+                                                        + " AND (a.cTranStat = '3' OR a.cTranStat = '1')" 
+                                                        );
+                System.out.println("EXISTING INQUIRY ON PROCESS AND WITH VSP CHECK: " + lsSQL);
+                loRS = poGRider.executeQuery(lsWhere);
+                //Check for existing inquiry with same SE
+                if (MiscUtil.RecordCount(loRS) > 0){
+                    while(loRS.next()){
+                        lsID = loRS.getString("sTransNox");
+                        lsDesc = loRS.getString("sCompnyNm");
+                        lsEmpl = loRS.getString("sSalesExe");
+                        lsStat = loRS.getString("sTranStat");
+                    }
+                    MiscUtil.close(loRS);
+                    
+                    //Check for existing reservation
+                    
+                    
+                    psMessage = "Found an existing inquiry record for " + lsDesc.toUpperCase() + "\nWith SE: " + lsEmpl.toUpperCase() + "\n<Inquiry ID: " + lsID + ">\n<Inquiry Status: " + lsStat + ">";
+                            //+ "\n\n Do you want to view the record?";
+                    return false;
+                } 
+                
 
             }
         
