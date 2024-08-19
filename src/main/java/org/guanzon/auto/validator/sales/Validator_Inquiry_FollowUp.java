@@ -63,71 +63,6 @@ public class Validator_Inquiry_FollowUp implements ValidatorInterface {
             }
         }
         
-//        date = (Date) poEntity.getValue("dFollowUp");
-//        if(date == null){
-//            psMessage = "Invalid Next Follow Up Date.";
-//            return false;
-//        } else {
-//            if("1900-01-01".equals(xsDateShort(date))){
-//                psMessage = "Invalid Next Follow Up Date.";
-//                return false;
-//            }
-//        }
-//        
-//        if(poEntity.getFollowUpTme() == null) {
-//            psMessage = "Invalid Next Follow Up Time.";
-//            return false;
-//        } else {
-//            if (poEntity.getFollowUpTme().equals(Time.valueOf("00:00:00")) || String.valueOf(poEntity.getFollowUpTme()).length() < 8){
-//                psMessage = "Invalid Next Follow Up Time.";
-//                return false;
-//            }
-//        }
-//        
-//        int lnHr = Integer.parseInt(String.valueOf(poEntity.getFollowUpTme()).substring(0, 2));
-//        String lnCol1 =String.valueOf(poEntity.getFollowUpTme()).substring(2, 3);
-//        int lnMin = Integer.parseInt(String.valueOf(poEntity.getFollowUpTme()).substring(3, 5));
-//        String lnCol2 =String.valueOf(poEntity.getFollowUpTme()).substring(5, 6);
-//        int lnSs = Integer.parseInt(String.valueOf(poEntity.getFollowUpTme()).substring(6, 8));
-//        
-//        System.out.println("lnHr : " + lnHr);
-//        System.out.println("lnCol1 : " + lnCol1);
-//        System.out.println("lnMin : " + lnMin);
-//        System.out.println("lnCol2 : " + lnCol2);
-//        System.out.println("lnSs : "  + lnSs);
-//        
-//        if(!lnCol1.equals(":") || !lnCol2.equals(":")){
-//                psMessage = "Invalid Next Follow Up Time.";
-//                return false;
-//        }
-//        
-//        if(lnHr < 8 || lnHr > 17){
-//            psMessage = "Invalid Next Follow Up Time working hours.";
-//            return false;
-//        }
-//        
-//        if(lnMin < 0 || lnMin > 59){
-//            psMessage = "Invalid Next Follow Up Time minutes.";
-//            return false;
-//        }
-//        
-//        if(lnSs < 0 || lnSs > 59){
-//            psMessage = "Invalid Next Follow Up Time seconds.";
-//            return false;
-//        }
-//        
-//        if(lnHr == 17){
-//            if(lnMin > 30){
-//                psMessage = "Invalid Next Follow Up Time working hours.";
-//                return false;
-//            }
-//        }
-        
-//        if(xsDateShort((Date) poEntity.getValue("dFollowUp")).equals(xsDateShort((Date) poEntity.getValue("dTransact")))){
-//            psMessage = "Follow Up date cannot be the same with next follow up date.";
-//            return false;
-//        }
-        
         if(poEntity.getEmployID()== null) {
             psMessage = "Employee is not set.";
             return false;
@@ -142,32 +77,110 @@ public class Validator_Inquiry_FollowUp implements ValidatorInterface {
             psMessage = "Remarks is not set.";
             return false;
         } else {
-            if (poEntity.getRemarks().isEmpty()){
+            if (poEntity.getRemarks().trim().isEmpty()){
                 psMessage = "Remarks is not set.";
                 return false;
+            } else {
+                if (poEntity.getRemarks().trim().length() < 20){
+                    psMessage = "Remarks cannot be less than 20 characters.";
+                    return false;
+                }
             }
         }
         
-//        if(poEntity.getMessage()== null) {
-//            psMessage = "Message is not set.";
-//            return false;
-//        } else {
-//            if (poEntity.getMessage().isEmpty()){
-//                psMessage = "Message is not set.";
-//                return false;
-//            }
-//        }
-        
-        if(poEntity.getMethodCd().equals("2")){
+        if(poEntity.getMethodCd().equals("SOCIAL MEDIA")){
             if(poEntity.getSclMedia()== null) {
                 psMessage = "Social Media Platform is not set.";
                 return false;
             } else {
-                if (poEntity.getSclMedia().isEmpty()){
+                if (poEntity.getSclMedia().trim().isEmpty()){
                     psMessage = "Social Media Platform is not set.";
                     return false;
                 }
             }
+        } 
+        
+        if(!poEntity.getMethodCd().equals("UPDATE")){
+            date = (Date) poEntity.getValue("dFollowUp");
+            if(date == null){
+                psMessage = "Invalid Next Follow Up Date.";
+                return false;
+            } else {
+                if("1900-01-01".equals(xsDateShort(date))){
+                    psMessage = "Invalid Next Follow Up Date.";
+                    return false;
+                }
+            }
+
+            if(poEntity.getFollowUpTme() == null) {
+                psMessage = "Invalid Next Follow Up Time.";
+                return false;
+            } else {
+                if (poEntity.getFollowUpTme().equals(Time.valueOf("00:00:00")) || String.valueOf(poEntity.getFollowUpTme()).length() < 8){
+                    psMessage = "Invalid Next Follow Up Time.";
+                    return false;
+                }
+            }
+
+            int lnHr = Integer.parseInt(String.valueOf(poEntity.getFollowUpTme()).substring(0, 2));
+            String lnCol1 =String.valueOf(poEntity.getFollowUpTme()).substring(2, 3);
+            int lnMin = Integer.parseInt(String.valueOf(poEntity.getFollowUpTme()).substring(3, 5));
+            String lnCol2 =String.valueOf(poEntity.getFollowUpTme()).substring(5, 6);
+            int lnSs = Integer.parseInt(String.valueOf(poEntity.getFollowUpTme()).substring(6, 8));
+
+            System.out.println("lnHr : " + lnHr);
+            System.out.println("lnCol1 : " + lnCol1);
+            System.out.println("lnMin : " + lnMin);
+            System.out.println("lnCol2 : " + lnCol2);
+            System.out.println("lnSs : "  + lnSs);
+
+            if(!lnCol1.equals(":") || !lnCol2.equals(":")){
+                    psMessage = "Invalid Next Follow Up Time.";
+                    return false;
+            }
+
+            if(lnHr < 8 || lnHr > 17){
+                psMessage = "Invalid Next Follow Up Time working hours.";
+                return false;
+            }
+
+            if(lnMin < 0 || lnMin > 59){
+                psMessage = "Invalid Next Follow Up Time minutes.";
+                return false;
+            }
+
+            if(lnSs < 0 || lnSs > 59){
+                psMessage = "Invalid Next Follow Up Time seconds.";
+                return false;
+            }
+
+            if(lnHr == 17){
+                if(lnMin > 30){
+                    psMessage = "Invalid Next Follow Up Time working hours.";
+                    return false;
+                }
+            }
+
+            if(xsDateShort((Date) poEntity.getValue("dFollowUp")).equals(xsDateShort((Date) poEntity.getValue("dTransact")))){
+                psMessage = "Follow Up date cannot be the same with next follow up date.";
+                return false;
+            }
+            
+            if(poEntity.getMessage()== null) {
+                psMessage = "Message is not set.";
+                return false;
+            } else {
+                if (poEntity.getMessage().trim().isEmpty()){
+                    psMessage = "Message is not set.";
+                    return false;
+                } else {
+                    if (poEntity.getMessage().trim().length()< 20){
+                        psMessage = "Message cannot be less than 20 characters.";
+                        return false;
+                    }
+                }
+            }
+        
         }
         
         return true;

@@ -5,7 +5,15 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.guanzon.appdriver.base.GRider;
+import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.auto.model.sales.Model_Inquiry_Reservation;
 
 /**
@@ -67,6 +75,32 @@ public class Validator_Inquiry_Reservation implements ValidatorInterface {
                 psMessage = "Invalid reservation amount.";
                 return false;
             }
+        }
+
+        try {
+            String lsValue = "";
+            String lsStandardSets = "SELECT sValuexxx FROM xxxstandard_sets WHERE sDescript = 'vhclreservation_max_amt'";
+            System.out.println("CHECK STANDARD SETS FROM vhclreservation_max_amt : " + lsStandardSets);
+            ResultSet loRS = poGRider.executeQuery(lsStandardSets);
+            //Check for existing inquiry with same SE
+            if (MiscUtil.RecordCount(loRS) > 0){
+                    while(loRS.next()){
+                        lsValue = loRS.getString("sValuexxx");
+                    }
+
+                    MiscUtil.close(loRS);
+
+                    if(poEntity.getAmount() > Double.parseDouble(lsValue)){
+                        psMessage = "Reservation cannot be exceed from the amount of " + Double.parseDouble(lsValue) + ".";
+                        return false;
+                    }
+            }else {
+                psMessage = "Notify System Administrator to config Standard set for `vhclreservation_max_amt`.";
+                return false;
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(Validator_Inquiry_Reservation.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return true;
