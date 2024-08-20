@@ -229,7 +229,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                         + "     WHEN a.cTranStat = '0' THEN 'FOR FOLLOW-UP'"                           
                         + " 	WHEN a.cTranStat = '1' THEN 'ON PROCESS' "                                   
                         + " 	WHEN a.cTranStat = '2' THEN 'LOST SALE'  "                                   
-                        + " 	WHEN a.cTranStat = '3' THEN 'VSP'        "                                   
+                        + " 	WHEN a.cTranStat = '3' THEN 'WITH VSP'   "                                   
                         + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                     
                         + " 	ELSE 'CANCELLED'  "                                                          
                         + "    END AS sTranStat "                                                          
