@@ -5,6 +5,8 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.auto.model.sales.Model_Inquiry_Requirements;
 
@@ -49,7 +51,32 @@ public class Validator_Inquiry_Requirements implements ValidatorInterface {
             }
         }
         
+        Date date = (Date) poEntity.getValue("dReceived");
+            if(date == null){
+                psMessage = "Invalid Receive Date.";
+                return false;
+            } else {
+                if("1900-01-01".equals(xsDateShort(date))){
+                    psMessage = "Invalid Receive Date.";
+                    return false;
+                }
+            }
+        
         return true;
+    }
+    
+    private static String xsDateShort(Date fdValue) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(fdValue);
+        return date;
+    }
+
+    private static String xsDateShort(String fsValue) throws org.json.simple.parser.ParseException, java.text.ParseException {
+        SimpleDateFormat fromUser = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String lsResult = "";
+        lsResult = myFormat.format(fromUser.parse(fsValue));
+        return lsResult;
     }
 
     @Override
