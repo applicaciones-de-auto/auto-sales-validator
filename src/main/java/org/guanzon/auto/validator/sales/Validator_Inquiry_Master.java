@@ -220,8 +220,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                             + " 	WHEN a.cTranStat = '1' THEN 'ON PROCESS' "                                   
                             + " 	WHEN a.cTranStat = '2' THEN 'LOST SALE'  "                                   
                             + " 	WHEN a.cTranStat = '3' THEN 'VSP'        "                                   
-                            + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                   
-                            + " 	WHEN a.cTranStat = '5' THEN 'RETIRED'    "                                   
+                            + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                     
                             + " 	ELSE 'CANCELLED'  "                                                          
                             + "    END AS sTranStat "                                                          
                             + "  , b.sCompnyNm      "                                                          
@@ -262,7 +261,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
 
                     MiscUtil.close(loRS);
 
-                    psMessage = "Found an existing inquiry record for\n" + lsDesc.toUpperCase() + " <Inquiry ID:" + lsID + ">\n\n Do you want to view the record?";
+                    psMessage = "Found an existing inquiry record for\n" + lsDesc.toUpperCase() + " <Inquiry ID:" + lsID + ">";
                     return false;
                 } 
 
