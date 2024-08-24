@@ -323,6 +323,15 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             //VSP CANCELLATION
             if(poEntity.getTranStat().equals("0")){
                 //check if linked with UDR
+                if (poEntity.getUDRNo() != null){
+                    if (!poEntity.getUDRNo().trim().isEmpty()){
+                        psMessage = "Found an existing vehicle delivery record."
+                                    + "\n\n<UDR No:" + lsID + ">"
+                                    + "\n\nCancellation aborted.";
+                        return false;
+                    }
+                }
+                
                 lsSQL =   " SELECT "         
                         + "   sTransNox "    
                         + " , dTransact "    
@@ -357,8 +366,56 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 
                 //TODO
                 //check if linked with RF
+                
+                //check if linked with GATEPASS
+                if (poEntity.getGatePsNo()!= null){
+                    if (!poEntity.getGatePsNo().trim().isEmpty()){
+                        psMessage = "Found an existing job order record."
+                                    + "\n\n<Gatepass No:" + lsID + ">"
+                                    + "\n\nCancellation aborted.";
+                        return false;
+                    }
+                }
+                
+                lsSQL =     " SELECT "                
+                        + "   sTransNox "           
+                        + " , dTransact "           
+                        + " , sSourceGr "           
+                        + " , sSourceCD "           
+                        + " , sSourceNo "           
+                        + " , cTranStat "           
+                        + " FROM vehicle_gatepass " ;
+                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> '0' "
+                                                    + " AND sSourceNo = " + SQLUtil.toSQL(poEntity.getTransNo()) 
+                                                    );
+                System.out.println("EXISTING GATEPASS CHECK: " + lsSQL);
+                loRS = poGRider.executeQuery(lsSQL);
+
+                if (MiscUtil.RecordCount(loRS) > 0){
+                    while(loRS.next()){
+                        lsID = loRS.getString("sTransNox");
+                        lsDesc = xsDateShort(loRS.getDate("dTransact"));
+                    }
+
+                    MiscUtil.close(loRS);
+
+                    psMessage = "Found an existing gatepass record."
+                                + "\n\n<Gatepass No:" + lsID + ">"
+                                + "\n<Gatepass Date:" + lsDesc + ">"
+                                + "\n\nCancellation aborted.";
+                    return false;
+                } 
 
                 //check if linked with JO
+                if (poEntity.getJONo()!= null){
+                    if (!poEntity.getJONo().trim().isEmpty()){
+                        psMessage = "Found an existing job order record."
+                                    + "\n\n<JO No:" + lsID + ">"
+                                    + "\n\nCancellation aborted.";
+                        return false;
+                    }
+                }
+                
                 lsSQL =   " SELECT "                
                         + "   sTransNox "           
                         + " , dTransact "           
