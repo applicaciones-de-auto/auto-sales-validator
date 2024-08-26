@@ -498,7 +498,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         + " FROM si_master_source a "                           
                         + " LEFT JOIN si_master b ON b.sTransNox = a.sTransNox ";
                 lsSQL = MiscUtil.addCondition(lsSQL, " b.cTranStat <> '0' "
-                                                    + " AND a.sSourceNo = " + SQLUtil.toSQL(poEntity.getTransNo()) 
+                                                    + " AND a.sReferNox = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING PAYMENT CHECK: " + lsSQL);
                 loRS = poGRider.executeQuery(lsSQL);
