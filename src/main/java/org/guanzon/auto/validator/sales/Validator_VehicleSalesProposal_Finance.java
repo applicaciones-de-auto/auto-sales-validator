@@ -5,10 +5,7 @@
  */
 package org.guanzon.auto.validator.sales;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.math.BigDecimal;
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.auto.model.sales.Model_VehicleSalesProposal_Finance;
 
@@ -77,7 +74,8 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
             psMessage = "Finance Amount is not set.";
             return false;
         } else {
-            if (poEntity.getFinAmt() <= 0.00){
+            //if (poEntity.getFinAmt() <= 0.00){
+            if (poEntity.getFinAmt().compareTo(new BigDecimal("0.00")) <= 0){
                 psMessage = "Finance Amount is not set.";
                 return false;
             }
@@ -103,51 +101,56 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
             }
         }
         
-//        if(poEntity.getRebates() == null) {
-//            psMessage = "Finance Rebate is not set.";
-//            return false;
-//        } else {
-//            if (poEntity.getRebates() <= 0.00){
-//                psMessage = "Finance Rebate is not set.";
-//                return false;
-//            }
-//        }
+        if(poEntity.getRebates() == null) {
+            psMessage = "Finance Rebate is not set.";
+            return false;
+        } else {
+            if (poEntity.getRebates().compareTo(new BigDecimal("0.00")) <= 0){
+            //if (poEntity.getRebates() <= 0.00){
+                psMessage = "Finance Rebate is not set.";
+                return false;
+            }
+        }
         
         if(poEntity.getMonAmort() == null) {
             psMessage = "Finance Amortization is not set.";
             return false;
         } else {
-            if (poEntity.getMonAmort() <= 0.00){
+            //if (poEntity.getMonAmort() <= 0.00){
+            if (poEntity.getMonAmort().compareTo(new BigDecimal("0.00")) <= 0){
                 psMessage = "Finance Amortization is not set.";
                 return false;
             }
         }
         
-//        if(poEntity.getPNValue() == null) {
-//            psMessage = "Finance Value is not set.";
-//            return false;
-//        } else {
-//            if (poEntity.getPNValue() <= 0.00){
-//                psMessage = "Finance Value is not set.";
-//                return false;
-//            }
-//        }
-//        
-//        if(poEntity.getBnkPaid() == null) {
-//            psMessage = "Finance Bank Pay is not set.";
-//            return false;
-//        } else {
-//            if (poEntity.getBnkPaid() <= 0.00){
-//                psMessage = "Finance Bank Pay is not set.";
-//                return false;
-//            }
-//        }
+        if(poEntity.getPNValue() == null) {
+            psMessage = "Finance Value is not set.";
+            return false;
+        } else {
+            //if (poEntity.getPNValue() <= 0.00){
+            if (poEntity.getPNValue().compareTo(new BigDecimal("0.00")) <= 0){
+                psMessage = "Finance Value is not set.";
+                return false;
+            }
+        }
+        
+        if(poEntity.getBnkPaid() == null) {
+            psMessage = "Finance Bank Pay is not set.";
+            return false;
+        } else {
+            if (poEntity.getBnkPaid().compareTo(new BigDecimal("0.00")) <= 0){
+            //if (poEntity.getBnkPaid() <= 0.00){
+                psMessage = "Finance Bank Pay is not set.";
+                return false;
+            }
+        }
         
         if(poEntity.getGrsMonth() == null) {
             psMessage = "Finance Gross Amount is not set.";
             return false;
         } else {
-            if (poEntity.getGrsMonth() <= 0.00){
+            //if (poEntity.getGrsMonth() <= 0.00){
+            if (poEntity.getGrsMonth().compareTo(new BigDecimal("0.00")) <= 0){
                 psMessage = "Finance Gross Amount is not set.";
                 return false;
             }
@@ -157,7 +160,8 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
             psMessage = "Finance Net Downpayment is not set.";
             return false;
         } else {
-            if (poEntity.getNtDwnPmt() <= 0.00){
+            //if (poEntity.getNtDwnPmt() <= 0.00){
+            if (poEntity.getNtDwnPmt().compareTo(new BigDecimal("0.00")) <= 0){
                 psMessage = "Finance Net Downpayment is not set.";
                 return false;
             }

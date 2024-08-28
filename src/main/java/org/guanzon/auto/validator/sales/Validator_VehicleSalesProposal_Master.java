@@ -5,6 +5,7 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -112,12 +113,14 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
-        if (poEntity.getTranTotl() <= 0.00 || poEntity.getTranTotl() == null) {
+        if (poEntity.getTranTotl().equals(new BigDecimal("0.00")) || poEntity.getTranTotl() == null){
+//        if (poEntity.getTranTotl() <= 0.00 || poEntity.getTranTotl() == null) {
             psMessage = "Invalid Gross Amount Total.";
             return false;
         }
         
-        if (poEntity.getTranTotl() == 0.00) {
+        if (poEntity.getTranTotl().equals(new BigDecimal("0.00"))){
+//        if (poEntity.getTranTotl() == 0.00) {
             if (poEntity.getPayMode().equals("0")){
                 psMessage = "Please Enter Amount to be transact.";
                 return false;
@@ -136,12 +139,14 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
-        if (poEntity.getNetTTotl() < 0.00 || poEntity.getNetTTotl() == null){
+        if (poEntity.getNetTTotl().compareTo(new BigDecimal("0.00")) < 0 || poEntity.getNetTTotl() == null){
+//        if (poEntity.getNetTTotl() < 0.00 || poEntity.getNetTTotl() == null){
             psMessage = "Invalid Net Amount Due.";
             return false;
         }
         
-        if (poEntity.getOthrChrg() > 0.00){
+        if (poEntity.getOthrChrg().compareTo(new BigDecimal("0.00")) > 0 || poEntity.getOthrChrg() != null){
+//        if (poEntity.getOthrChrg() > 0.00){
             if (poEntity.getOthrDesc() == null ){
                 psMessage = "Please enter Miscellaneous Charge Description.";
                 return false;
@@ -156,14 +161,16 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
         //Validate Fleet Discount
         if(poEntity.getIsVIP() != null){
             if (!poEntity.getIsVIP().equals("0")){
-                if (poEntity.getFleetDsc()> 0.00){
+                if (poEntity.getFleetDsc().compareTo(new BigDecimal("0.00")) > 0 || poEntity.getFleetDsc() != null){
+//                if (poEntity.getFleetDsc()> 0.00){
                     if ((poEntity.getDue2Sup() == 0.00) && (poEntity.getDue2Dlr() == 0.00)){
                         psMessage = "Please set amount of rate for Plant / Dealer.";
                         return false;
                     }
                 }
 
-                if (poEntity.getSPFltDsc() > 0.00){
+                if (poEntity.getSPFltDsc().compareTo(new BigDecimal("0.00")) > 0 || poEntity.getSPFltDsc() != null){
+//                if (poEntity.getSPFltDsc() > 0.00){
                     if ((poEntity.getSPFD2Sup() == 0.00) && (poEntity.getSPFD2Dlr() == 0.00)){
                         psMessage = "Please set amount of rate for Plant / Dealer.";
                         return false;
@@ -224,7 +231,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     + " , cCustGrpx "          
                     + " FROM customer_inquiry ";
             lsSQL = MiscUtil.addCondition(lsSQL, " sTransNox = " + SQLUtil.toSQL(poEntity.getInqryID()) 
-                                                    + " cPayModex <> " + SQLUtil.toSQL(poEntity.getPayMode())
+                                                    + " AND cPayModex <> " + SQLUtil.toSQL(poEntity.getPayMode())
                                                     );
             System.out.println("EXISTING INQUIRY PAYMENT MODE VS VSP PAYMENT MODE CHECK: " + lsSQL);
             loRS = poGRider.executeQuery(lsSQL);
@@ -248,8 +255,10 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         }
                     }
-
-                    if (poEntity.getTPLAmt() > 0.00){
+                    
+                    
+                    if (poEntity.getTPLAmt().compareTo(new BigDecimal("0.00")) > 0){
+//                    if (poEntity.getTPLAmt() > 0.00){
                         psMessage = "Amount cannot be more than 0.00 if TPL status is FOC.";
                         return false;
                     }
@@ -265,7 +274,8 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         }
                     }
 
-                    if (poEntity.getTPLAmt() <= 0.00){
+                if (poEntity.getTPLAmt().compareTo(new BigDecimal("0.00")) <= 0){
+//                    if (poEntity.getTPLAmt() <= 0.00){
                         psMessage = "Amount cannot be 0.00 if TPL status is not FOC.";
                         return false;
                     }
@@ -288,12 +298,15 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     }
 
                     if (poEntity.getCompStat().equals("1")){
-                        if (poEntity.getCompAmt() > 0.00){
+
+                        if (poEntity.getCompAmt().compareTo(new BigDecimal("0.00")) > 0){
+//                        if (poEntity.getCompAmt() > 0.00){
                             psMessage = "Amount cannot be more than 0.00 if COMPRE status is FOC.";
                             return false;
                         }
                     } else {
-                        if (poEntity.getCompAmt() <= 0.00){
+                        if (poEntity.getCompAmt().compareTo(new BigDecimal("0.00")) <= 0){
+//                        if (poEntity.getCompAmt() <= 0.00){
                             psMessage = "Amount cannot be 0.00 if COMPRE status is not FOC.";
                             return false;
                         }

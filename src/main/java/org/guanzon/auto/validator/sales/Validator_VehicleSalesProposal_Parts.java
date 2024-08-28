@@ -74,7 +74,7 @@ public class Validator_VehicleSalesProposal_Parts implements ValidatorInterface 
             psMessage = "Parts Amount is not set.";
             return false;
         } else {
-            BigDecimal ldblAmt = new BigDecimal("100");
+            BigDecimal ldblAmt = new BigDecimal("0.00");
             ldblAmt = new BigDecimal(String.valueOf(poEntity.getUnitPrce()));
             if(poEntity.getChrgeTyp().equals("0")){
                 if (ldblAmt.compareTo(BigDecimal.ZERO) != 0) {
