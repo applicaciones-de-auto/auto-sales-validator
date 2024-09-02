@@ -42,11 +42,11 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
     @Override
     public boolean isEntryOkay() {
         if(poEntity.getTransNo()== null) {
-            psMessage = "Inquiry Transaction No is not set.";
+            psMessage = "Transaction No is not set.";
             return false;
         } else {
             if (poEntity.getTransNo().isEmpty()){
-                psMessage = "Inquiry Transaction No is not set.";
+                psMessage = "Transaction No is not set.";
                 return false;
             }
         }
