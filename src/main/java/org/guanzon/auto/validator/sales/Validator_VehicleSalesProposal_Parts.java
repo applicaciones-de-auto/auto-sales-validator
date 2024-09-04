@@ -75,14 +75,16 @@ public class Validator_VehicleSalesProposal_Parts implements ValidatorInterface 
             return false;
         } else {
             BigDecimal ldblAmt = new BigDecimal("0.00");
-            ldblAmt = new BigDecimal(String.valueOf(poEntity.getUnitPrce()));
+            BigDecimal ldblDsc = new BigDecimal("0.00");
+            ldblAmt = new BigDecimal(String.valueOf(poEntity.getSelPrice()));
+            ldblDsc = new BigDecimal(String.valueOf(poEntity.getPartsDscount()));
             if(poEntity.getChrgeTyp().equals("0")){
-                if (ldblAmt.compareTo(BigDecimal.ZERO) != 0) {
+                if (!ldblAmt.equals(ldblDsc)) {
                     psMessage = "Invalid Parts Amount on for parts " + poEntity.getDescript()+ ". Charge type is FOC.";
                     return false;
                 }
             } else {
-                if (ldblAmt.compareTo(BigDecimal.ZERO) <= 0) {
+                if (ldblAmt.equals(ldblDsc)) {
                     psMessage = "Invalid Parts Amount on for parts " + poEntity.getDescript() + ". Charge type is not FOC.";
                     return false;
                 }

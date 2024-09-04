@@ -101,16 +101,16 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
             }
         }
         
-        if(poEntity.getRebates() == null) {
-            psMessage = "Finance Rebate is not set.";
-            return false;
-        } else {
-            if (poEntity.getRebates().compareTo(new BigDecimal("0.00")) <= 0){
-            //if (poEntity.getRebates() <= 0.00){
-                psMessage = "Finance Rebate is not set.";
-                return false;
-            }
-        }
+//        if(poEntity.getRebates() == null) {
+//            psMessage = "Finance Rebate is not set.";
+//            return false;
+//        } else {
+//            if (poEntity.getRebates().compareTo(new BigDecimal("0.00")) <= 0){
+//            //if (poEntity.getRebates() <= 0.00){
+//                psMessage = "Finance Rebate is not set.";
+//                return false;
+//            }
+//        }
         
         if(poEntity.getMonAmort() == null) {
             psMessage = "Finance Amortization is not set.";
@@ -134,16 +134,16 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
             }
         }
         
-        if(poEntity.getBnkPaid() == null) {
-            psMessage = "Finance Bank Pay is not set.";
-            return false;
-        } else {
-            if (poEntity.getBnkPaid().compareTo(new BigDecimal("0.00")) <= 0){
-            //if (poEntity.getBnkPaid() <= 0.00){
-                psMessage = "Finance Bank Pay is not set.";
-                return false;
-            }
-        }
+//        if(poEntity.getBnkPaid() == null) {
+//            psMessage = "Finance Bank Pay is not set.";
+//            return false;
+//        } else {
+//            if (poEntity.getBnkPaid().compareTo(new BigDecimal("0.00")) <= 0){
+//            //if (poEntity.getBnkPaid() <= 0.00){
+//                psMessage = "Finance Bank Pay is not set.";
+//                return false;
+//            }
+//        }
         
         if(poEntity.getGrsMonth() == null) {
             psMessage = "Finance Gross Amount is not set.";

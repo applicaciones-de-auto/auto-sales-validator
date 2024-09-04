@@ -101,7 +101,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
-        if(poEntity.getUnitPrce() != null || poEntity.getUnitPrce().compareTo((new BigDecimal("0.00"))) > 0){
+        if(poEntity.getUnitPrce().compareTo((new BigDecimal("0.00"))) > 0){
             if(poEntity.getSerialID()== null) {
                 psMessage = "Vehicle Serial is not set.";
                 return false;
@@ -145,7 +145,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             return false;
         }
         
-        if (poEntity.getOthrChrg().compareTo(new BigDecimal("0.00")) > 0 || poEntity.getOthrChrg() != null){
+        if (poEntity.getOthrChrg().compareTo(new BigDecimal("0.00")) > 0){
 //        if (poEntity.getOthrChrg() > 0.00){
             if (poEntity.getOthrDesc() == null ){
                 psMessage = "Please enter Miscellaneous Charge Description.";
@@ -161,7 +161,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
         //Validate Fleet Discount
         if(poEntity.getIsVIP() != null){
             if (!poEntity.getIsVIP().equals("0")){
-                if (poEntity.getFleetDsc().compareTo(new BigDecimal("0.00")) > 0 || poEntity.getFleetDsc() != null){
+                if (poEntity.getFleetDsc().compareTo(new BigDecimal("0.00")) > 0){
 //                if (poEntity.getFleetDsc()> 0.00){
                     if ((poEntity.getDue2Sup() == 0.00) && (poEntity.getDue2Dlr() == 0.00)){
                         psMessage = "Please set amount of rate for Plant / Dealer.";
@@ -169,7 +169,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     }
                 }
 
-                if (poEntity.getSPFltDsc().compareTo(new BigDecimal("0.00")) > 0 || poEntity.getSPFltDsc() != null){
+                if (poEntity.getSPFltDsc().compareTo(new BigDecimal("0.00")) > 0){
 //                if (poEntity.getSPFltDsc() > 0.00){
                     if ((poEntity.getSPFD2Sup() == 0.00) && (poEntity.getSPFD2Dlr() == 0.00)){
                         psMessage = "Please set amount of rate for Plant / Dealer.";
@@ -177,6 +177,90 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     }
                 }
             }
+        }
+        
+        if(poEntity.getTPLStat() == null) {
+            psMessage = "TPL Insurance type is not set.";
+            return false;
+        } else {
+            if (poEntity.getTPLStat().trim().isEmpty()){
+                psMessage = "TPL Insurance type  is not set.";
+                return false;
+            }
+        }
+        
+        if(poEntity.getCompStat() == null) {
+            psMessage = "Comprehensive Insurance type is not set.";
+            return false;
+        } else {
+            if (poEntity.getCompStat().trim().isEmpty()){
+                psMessage = "Comprehensive Insurance type  is not set.";
+                return false;
+            } else {
+                switch(poEntity.getCompStat()){
+                    case "1": //FOC
+                        if (!poEntity.getInsurTyp().equals("1")){
+                            psMessage = "Invalid Comprehensive Insurance type.";
+                            return false;
+                        }
+                    case "3": //C/O DEALER
+                        if(poEntity.getInsurTyp() == null) {
+                            psMessage = "Comprehensive Insurance type is not set.";
+                            return false;
+                        } else {
+                            if (poEntity.getInsurTyp().trim().isEmpty()){
+                                psMessage = "Comprehensive Insurance type  is not set.";
+                                return false;
+                            }
+                        }
+                        
+                        if(poEntity.getInsurYr() == null) {
+                            psMessage = "Comprehensive Insurance year is not set.";
+                            return false;
+                        } else {
+                            if (poEntity.getInsurYr() == 0){
+                                psMessage = "Comprehensive Insurance year is not set.";
+                                return false;
+                            }
+                        }
+                        break;
+                    case "0": //NONE
+                    case "2": //C/O CLIENT
+                    case "4": //C/O BANK
+                        if(!poEntity.getInsurTyp().equals("0")) {
+                            psMessage = "Invalid Comprehensive Insurance type.";
+                            return false;
+                        } 
+                        
+                        if (poEntity.getInsurYr() > 0){
+                            psMessage = "Invalid Comprehensive Insurance year.";
+                            return false;
+                        }
+                        break;
+                    
+                }
+                
+            }
+        }
+        
+        if(poEntity.getLTOStat() == null) {
+            psMessage = "LTO type is not set.";
+            return false;
+        } else {
+            if (poEntity.getLTOStat().trim().isEmpty()){
+                psMessage = "LTO type is not set.";
+                return false;
+            }
+        }
+        
+        if(poEntity.getChmoStat() == null) {
+            psMessage = "CHMO type is not set.";
+            return false;
+        } else {
+            if (poEntity.getChmoStat().trim().isEmpty()){
+                psMessage = "CHMO type is not set.";
+                return false;
+            } 
         }
         
         try {
