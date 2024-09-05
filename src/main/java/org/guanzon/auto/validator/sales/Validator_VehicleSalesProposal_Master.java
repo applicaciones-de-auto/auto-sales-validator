@@ -179,6 +179,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
+        //Validate TPL Insurance
         if(poEntity.getTPLStat() == null) {
             psMessage = "TPL Insurance type is not set.";
             return false;
@@ -186,9 +187,48 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             if (poEntity.getTPLStat().trim().isEmpty()){
                 psMessage = "TPL Insurance type  is not set.";
                 return false;
+            } else {
+        
+                switch(poEntity.getTPLStat()){
+                    case "1": //FOC
+                        if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                            psMessage = "Invalid TPL Insurance Type.";
+                            return false;
+                        }
+                    case "3": //C/O DEALER
+                        if(poEntity.getInsTplCd() == null) {
+                            psMessage = "TPL Insurance is not set.";
+                            return false;
+                        } else {
+                            if (poEntity.getInsTplCd().trim().isEmpty()){
+                                psMessage = "TPL Insurance is not set.";
+                                return false;
+                            }
+                        }
+
+                        if(poEntity.getTPLStat().equals("3")){
+                            if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) <= 0)){
+                                psMessage = "Invalid TPL Insurance Type.";
+                                return false;
+                            }
+                        }
+
+                        break;
+                    case "0": //NONE
+                    case "2": //C/O CLIENT
+                    case "4": //C/O BANK
+                        if(poEntity.getInsTplCd() != null) {
+                            if (!poEntity.getInsTplCd().trim().isEmpty()){
+                                psMessage = "Invalid TPL Insurance Type.";
+                                return false;
+                            }
+                        }
+                        break;
+                }
             }
         }
         
+        //Validate Comprehensive Insurance
         if(poEntity.getCompStat() == null) {
             psMessage = "Comprehensive Insurance type is not set.";
             return false;
@@ -199,7 +239,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             } else {
                 switch(poEntity.getCompStat()){
                     case "1": //FOC
-                        if (!poEntity.getInsurTyp().equals("1")){
+                        if (!poEntity.getInsurTyp().equals("1")){ //FREE
                             psMessage = "Invalid Comprehensive Insurance type.";
                             return false;
                         }
@@ -236,10 +276,13 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             psMessage = "Invalid Comprehensive Insurance year.";
                             return false;
                         }
+                        
+                        if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                            psMessage = "Invalid Comprehensive Insurance Amount.";
+                            return false;
+                        }
                         break;
-                    
                 }
-                
             }
         }
         
@@ -250,6 +293,21 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             if (poEntity.getLTOStat().trim().isEmpty()){
                 psMessage = "LTO type is not set.";
                 return false;
+            } else {
+                switch(poEntity.getLTOStat()){
+                    case "0": //NONE
+                    case "1": //FOC
+                        if ((poEntity.getLTOAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                            psMessage = "Invalid LTO Amount.";
+                            return false;
+                        }
+                        break;
+                    case "2": //CHARGE
+                        if ((poEntity.getLTOAmt().compareTo(new BigDecimal(0.00)) <= 0)){
+                            psMessage = "Invalid LTO Amount.";
+                            return false;
+                        }
+                }
             }
         }
         
@@ -260,7 +318,24 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             if (poEntity.getChmoStat().trim().isEmpty()){
                 psMessage = "CHMO type is not set.";
                 return false;
-            } 
+            } else {
+                switch(poEntity.getChmoStat()){
+                    case "0": //NONE
+                    case "1": //FOC
+                    case "3": //CARE OF BANK
+                        if ((poEntity.getChmoAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                            psMessage = "Invalid CHMO Amount.";
+                            return false;
+                        }
+                        break;
+                    case "2": //CHARGE
+                        if ((poEntity.getChmoAmt().compareTo(new BigDecimal(0.00)) <= 0)){
+                            psMessage = "Invalid CHMO Amount.";
+                            return false;
+                        }
+                    break;
+                }
+            }
         }
         
         try {
@@ -324,97 +399,6 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 psMessage = "Payment Mode must be the same with inquiry.";
                 MiscUtil.close(loRS);
                 return false;
-            }
-            
-            //Validate Insurance
-            //TPL
-            switch (poEntity.getTPLStat()){
-                case "1":
-                    if (poEntity.getInsTplCd() == null){
-                        psMessage = "Please select Insurance Company.";
-                        return false;
-                    } else { 
-                        if (poEntity.getInsTplCd().trim().isEmpty()){
-                            psMessage = "Please select Insurance Company.";
-                            return false;
-                        }
-                    }
-                    
-                    
-                    if (poEntity.getTPLAmt().compareTo(new BigDecimal("0.00")) > 0){
-//                    if (poEntity.getTPLAmt() > 0.00){
-                        psMessage = "Amount cannot be more than 0.00 if TPL status is FOC.";
-                        return false;
-                    }
-                break;
-                case "3":
-                    if (poEntity.getInsTplCd() == null){
-                        psMessage = "Please select Insurance Company.";
-                        return false;
-                    } else {
-                        if (poEntity.getInsTplCd().isEmpty()){
-                            psMessage = "Please select Insurance Company.";
-                            return false;
-                        }
-                    }
-
-                if (poEntity.getTPLAmt().compareTo(new BigDecimal("0.00")) <= 0){
-//                    if (poEntity.getTPLAmt() <= 0.00){
-                        psMessage = "Amount cannot be 0.00 if TPL status is not FOC.";
-                        return false;
-                    }
-                break;
-
-            }
-
-            //COMPRE
-            switch(poEntity.getCompStat()){
-                case "1":
-                case "3":
-                    if (poEntity.getInsCode() == null){
-                        psMessage = "Please select Insurance Company.";
-                        return false;
-                    } else {
-                        if (poEntity.getInsCode().isEmpty()){
-                            psMessage = "Please select Insurance Company.";
-                            return false;
-                        }
-                    }
-
-                    if (poEntity.getCompStat().equals("1")){
-
-                        if (poEntity.getCompAmt().compareTo(new BigDecimal("0.00")) > 0){
-//                        if (poEntity.getCompAmt() > 0.00){
-                            psMessage = "Amount cannot be more than 0.00 if COMPRE status is FOC.";
-                            return false;
-                        }
-                    } else {
-                        if (poEntity.getCompAmt().compareTo(new BigDecimal("0.00")) <= 0){
-//                        if (poEntity.getCompAmt() <= 0.00){
-                            psMessage = "Amount cannot be 0.00 if COMPRE status is not FOC.";
-                            return false;
-                        }
-                    }
-
-                    if (poEntity.getCompStat().equals("3")){
-                        if (poEntity.getInsurTyp().equals("0")){
-                            psMessage = "Please select Insurance Type.";
-                            return false;
-
-                        }
-                        if (poEntity.getInsurYr() == null){
-                            psMessage = "Please select Insurance Year.";
-                            return false;
-                        } else {
-                            if (poEntity.getInsurYr() == 0){
-                                psMessage = "Please select Insurance Year.";
-                                return false;
-
-                            }
-                        }
-                    } 
-
-                    break;
             }
             
             //VSP CANCELLATION
