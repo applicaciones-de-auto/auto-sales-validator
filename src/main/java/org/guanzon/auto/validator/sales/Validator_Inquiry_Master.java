@@ -212,6 +212,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
             String lsDays = "";
             String lsInqdate = "1900-01-01";
             String lsInqRsv = "";
+            String lsLastUpDte = "";
             
             if(poEntity.getEditMode() == EditMode.ADDNEW){
                 lsSQL =   " SELECT "                                                                       
@@ -272,6 +273,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                         lsID = loRS.getString("sInqryIDx");
                         lsDesc = loRS.getString("sCompnyNm");
                         lsInqdate = xsDateShort(loRS.getDate("dTransact"));
+                        lsLastUpDte = xsDateShort(loRS.getDate("dLastUpdt"));
                         lsStat = loRS.getString("sTranStat");
                     }
                     MiscUtil.close(loRS);
@@ -287,7 +289,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
 
                          MiscUtil.close(loRS);
 
-                         LocalDate ldteFrom = strToDate(lsInqdate);
+                         LocalDate ldteFrom = strToDate(lsLastUpDte);
                          LocalDate ldteThru =  strToDate(xsDateShort((Date) poEntity.getValue("dTransact")));
                          Period age = Period.between(ldteFrom, ldteThru);
                          if(age.getDays() > Integer.parseInt(lsDays)){
