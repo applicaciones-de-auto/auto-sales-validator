@@ -244,6 +244,16 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         }
                     case "3": //C/O DEALER
+                        if(poEntity.getInsCode()== null) {
+                            psMessage = "Comprehensive Insurance is not set.";
+                            return false;
+                        } else {
+                            if (poEntity.getInsCode().trim().isEmpty()){
+                                psMessage = "Comprehensive Insurance is not set.";
+                                return false;
+                            }
+                        }
+                        
                         if(poEntity.getInsurTyp() == null) {
                             psMessage = "Comprehensive Insurance type is not set.";
                             return false;

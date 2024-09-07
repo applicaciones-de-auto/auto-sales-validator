@@ -81,25 +81,26 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
             }
         }
         
-        if(poEntity.getAcctTerm() == null) {
-            psMessage = "Finance Term is not set.";
-            return false;
-        } else {
-            if (poEntity.getAcctTerm() <= 0.00){
-                psMessage = "Finance Term is not set.";
-                return false;
-            }
-        }
-        
-        if(poEntity.getAcctRate() == null) {
-            psMessage = "Finance Rate is not set.";
-            return false;
-        } else {
-            if (poEntity.getAcctRate() <= 0.00){
-                psMessage = "Finance Rate is not set.";
-                return false;
-            }
-        }
+        //Only validate when pay mode is financing
+//        if(poEntity.getAcctTerm() == null) {
+//            psMessage = "Finance Term is not set.";
+//            return false;
+//        } else {
+//            if (poEntity.getAcctTerm() <= 0.00){
+//                psMessage = "Finance Term is not set.";
+//                return false;
+//            }
+//        }
+//        
+//        if(poEntity.getAcctRate() == null) {
+//            psMessage = "Finance Rate is not set.";
+//            return false;
+//        } else {
+//            if (poEntity.getAcctRate() <= 0.00){
+//                psMessage = "Finance Rate is not set.";
+//                return false;
+//            }
+//        }
         
 //        if(poEntity.getRebates() == null) {
 //            psMessage = "Finance Rebate is not set.";
@@ -111,28 +112,39 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
 //                return false;
 //            }
 //        }
-        
-        if(poEntity.getMonAmort() == null) {
-            psMessage = "Finance Amortization is not set.";
-            return false;
-        } else {
-            //if (poEntity.getMonAmort() <= 0.00){
-            if (poEntity.getMonAmort().compareTo(new BigDecimal("0.00")) <= 0){
-                psMessage = "Finance Amortization is not set.";
-                return false;
-            }
-        }
-        
-        if(poEntity.getPNValue() == null) {
-            psMessage = "Finance Value is not set.";
-            return false;
-        } else {
-            //if (poEntity.getPNValue() <= 0.00){
-            if (poEntity.getPNValue().compareTo(new BigDecimal("0.00")) <= 0){
-                psMessage = "Finance Value is not set.";
-                return false;
-            }
-        }
+//        
+//        if(poEntity.getMonAmort() == null) {
+//            psMessage = "Finance Amortization is not set.";
+//            return false;
+//        } else {
+//            //if (poEntity.getMonAmort() <= 0.00){
+//            if (poEntity.getMonAmort().compareTo(new BigDecimal("0.00")) <= 0){
+//                psMessage = "Finance Amortization is not set.";
+//                return false;
+//            }
+//        }
+//        
+//        if(poEntity.getPNValue() == null) {
+//            psMessage = "Finance Value is not set.";
+//            return false;
+//        } else {
+//            //if (poEntity.getPNValue() <= 0.00){
+//            if (poEntity.getPNValue().compareTo(new BigDecimal("0.00")) <= 0){
+//                psMessage = "Finance Value is not set.";
+//                return false;
+//            }
+//        }
+//        
+//        if(poEntity.getGrsMonth() == null) {
+//            psMessage = "Finance Gross Amount is not set.";
+//            return false;
+//        } else {
+//            //if (poEntity.getGrsMonth() <= 0.00){
+//            if (poEntity.getGrsMonth().compareTo(new BigDecimal("0.00")) <= 0){
+//                psMessage = "Finance Gross Amount is not set.";
+//                return false;
+//            }
+//        }
         
 //        if(poEntity.getBnkPaid() == null) {
 //            psMessage = "Finance Bank Pay is not set.";
@@ -144,17 +156,6 @@ public class Validator_VehicleSalesProposal_Finance implements ValidatorInterfac
 //                return false;
 //            }
 //        }
-        
-        if(poEntity.getGrsMonth() == null) {
-            psMessage = "Finance Gross Amount is not set.";
-            return false;
-        } else {
-            //if (poEntity.getGrsMonth() <= 0.00){
-            if (poEntity.getGrsMonth().compareTo(new BigDecimal("0.00")) <= 0){
-                psMessage = "Finance Gross Amount is not set.";
-                return false;
-            }
-        }
         
         if(poEntity.getNtDwnPmt() == null) {
             psMessage = "Finance Net Downpayment is not set.";
