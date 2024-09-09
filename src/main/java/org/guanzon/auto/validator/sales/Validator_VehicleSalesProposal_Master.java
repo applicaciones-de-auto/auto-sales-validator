@@ -113,6 +113,23 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
+        Date date = (Date) poEntity.getDelvryDt();
+        if(date == null){
+            psMessage = "Invalid Delivery Date.";
+            return false;
+        } else {
+            if("1900-01-01".equals(xsDateShort(date))){
+                psMessage = "Invalid Delivery Date.";
+                return false;
+            }
+        }
+        LocalDate ldDlvryDte = LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
+        LocalDate ldTranDte = LocalDate.of(poEntity.getTransactDte().getYear(), poEntity.getTransactDte().getMonth(), poEntity.getTransactDte().getDay());
+        if (ldDlvryDte.isBefore(ldTranDte)) {
+                psMessage = "Delivery Date cannot be before the transaction date.";
+                return false;
+        }
+        
         if (poEntity.getTranTotl().equals(new BigDecimal("0.00")) || poEntity.getTranTotl() == null){
 //        if (poEntity.getTranTotl() <= 0.00 || poEntity.getTranTotl() == null) {
             psMessage = "Invalid Gross Amount Total.";
@@ -159,25 +176,31 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
         }
         
         //Validate Fleet Discount
-        if(poEntity.getIsVIP() != null){
-            if (!poEntity.getIsVIP().equals("0")){
+        //if(poEntity.getIsVIP() != null){
+        //    if (!poEntity.getIsVIP().equals("0")){
                 if (poEntity.getFleetDsc().compareTo(new BigDecimal("0.00")) > 0){
-//                if (poEntity.getFleetDsc()> 0.00){
                     if ((poEntity.getDue2Sup() == 0.00) && (poEntity.getDue2Dlr() == 0.00)){
-                        psMessage = "Please set amount of rate for Plant / Dealer.";
+                        psMessage = "Please set amount of rate for STD Fleet Plant / Dealer.";
                         return false;
                     }
                 }
 
                 if (poEntity.getSPFltDsc().compareTo(new BigDecimal("0.00")) > 0){
-//                if (poEntity.getSPFltDsc() > 0.00){
                     if ((poEntity.getSPFD2Sup() == 0.00) && (poEntity.getSPFD2Dlr() == 0.00)){
-                        psMessage = "Please set amount of rate for Plant / Dealer.";
+                        psMessage = "Please set amount of rate for SPL Fleet Plant / Dealer.";
                         return false;
                     }
                 }
+        //    }
+        //}
+        
+        if (poEntity.getPromoDsc().compareTo(new BigDecimal("0.00")) > 0){
+            if ((poEntity.getPrmD2Dlr() == 0.00) && (poEntity.getPrmD2Sup() == 0.00)){
+                psMessage = "Please set amount of rate for Promo Plant / Dealer.";
+                return false;
             }
         }
+        
         
         //Validate TPL Insurance
         if(poEntity.getTPLStat() == null) {
@@ -243,6 +266,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             psMessage = "Invalid Comprehensive Insurance type.";
                             return false;
                         }
+                        
                     case "3": //C/O DEALER
                         if(poEntity.getInsCode()== null) {
                             psMessage = "Comprehensive Insurance is not set.";
@@ -273,6 +297,19 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                                 return false;
                             }
                         }
+                        
+                        if (!poEntity.getCompStat().equals("1")){ //FREE
+                            if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                                psMessage = "Invalid Comprehensive Insurance Amount.";
+                                return false;
+                            }
+                        } else {
+                            if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) < 0)){
+                                psMessage = "Invalid Comprehensive Insurance Amount.";
+                                return false;
+                            }
+                        }
+                        
                         break;
                     case "0": //NONE
                     case "2": //C/O CLIENT
@@ -287,7 +324,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         }
                         
-                        if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                        if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) > 0)){
                             psMessage = "Invalid Comprehensive Insurance Amount.";
                             return false;
                         }
