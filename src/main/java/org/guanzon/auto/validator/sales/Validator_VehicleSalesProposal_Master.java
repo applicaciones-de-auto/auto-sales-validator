@@ -18,6 +18,7 @@ import org.guanzon.appdriver.base.GRider;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.EditMode;
+import org.guanzon.appdriver.constant.TransactionStatus;
 import org.guanzon.auto.model.sales.Model_VehicleSalesProposal_Master;
 
 /**
@@ -404,7 +405,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     + " , sSerialID "     
                     + " FROM vsp_master " ;
 
-            lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> '0' "
+            lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
                                                     + " AND sInqryIDx = " + SQLUtil.toSQL(poEntity.getInqryID()) 
                                                     + " AND sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
@@ -449,17 +450,19 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
             
             //VSP CANCELLATION
-            if(poEntity.getTranStat().equals("0")){
+            if(poEntity.getTranStat().equals(TransactionStatus.STATE_CANCELLED)){
                 //check if linked with UDR
                 if (poEntity.getUDRNo() != null){
                     if (!poEntity.getUDRNo().trim().isEmpty()){
                         psMessage = "Found an existing vehicle delivery record."
-                                    + "\n\n<UDR No:" + lsID + ">"
+                                    + "\n\n<UDR No:" + poEntity.getUDRNo() + ">"
                                     + "\n\nCancellation aborted.";
                         return false;
                     }
                 }
                 
+                lsID = "";
+                lsDesc = "";
                 lsSQL =   " SELECT "         
                         + "   sTransNox "    
                         + " , dTransact "    
@@ -471,7 +474,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         + " , sSourceNo "    
                         + " , cTranStat "    
                         + " FROM udr_master ";
-                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> '0' "
+                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
                                                     + " AND sSourceNo = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING UDR CHECK: " + lsSQL);
@@ -496,6 +499,8 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 //check if linked with RF
                 
                 //check if linked with GATEPASS
+                lsID = "";
+                lsDesc = "";
                 if (poEntity.getGatePsNo()!= null){
                     if (!poEntity.getGatePsNo().trim().isEmpty()){
                         psMessage = "Found an existing job order record."
@@ -513,7 +518,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         + " , sSourceNo "           
                         + " , cTranStat "           
                         + " FROM vehicle_gatepass " ;
-                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> '0' "
+                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
                                                     + " AND sSourceNo = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING GATEPASS CHECK: " + lsSQL);
@@ -544,6 +549,9 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     }
                 }
                 
+                //Existing JO
+                lsID = "";
+                lsDesc = "";
                 lsSQL =   " SELECT "                
                         + "   sTransNox "           
                         + " , dTransact "           
@@ -554,7 +562,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         + " , sSourceCD "           
                         + " , cTranStat "           
                         + " FROM diagnostic_master ";
-                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> '0' "
+                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
                                                     + " AND sSourceNo = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING JO CHECK: " + lsSQL);
@@ -576,6 +584,8 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 } 
 
                 //check if linked with ins proposal
+                lsID = "";
+                lsDesc = "";
                 lsSQL =   " SELECT "                        
                         + "   sTransNox "                   
                         + " , dTransact "                   
@@ -585,7 +595,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         + " , sVSPNoxxx "                   
                         + " , cTranStat "                   
                         + " FROM insurance_policy_proposal ";
-                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> '0' "
+                lsSQL = MiscUtil.addCondition(lsSQL, " cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
                                                     + " AND sVSPNoxxx = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING INS PROPOSAL CHECK: " + lsSQL);
@@ -614,6 +624,9 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 //PAYMENT
                 //check if linked with CC
                 //check if linked with PR
+                lsID = "";
+                lsDesc = "";
+                lsType = "";
                 lsSQL =   " SELECT "                                             
                         + "   a.sTransNox "                                     
                         + " , a.sReferNox "                                     
@@ -625,7 +638,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                         + " , b.cTranStat  "                                  
                         + " FROM si_master_source a "                           
                         + " LEFT JOIN si_master b ON b.sTransNox = a.sTransNox ";
-                lsSQL = MiscUtil.addCondition(lsSQL, " b.cTranStat <> '0' "
+                lsSQL = MiscUtil.addCondition(lsSQL, " b.cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
                                                     + " AND a.sReferNox = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING PAYMENT CHECK: " + lsSQL);
