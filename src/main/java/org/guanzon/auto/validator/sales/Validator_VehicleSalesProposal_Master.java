@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
@@ -114,21 +116,49 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
+//        Date date = (Date) poEntity.getDelvryDt();
+//        if(date == null){
+//            psMessage = "Invalid Delivery Date.";
+//            return false;
+//        } else {
+//            if("1900-01-01".equals(xsDateShort(date))){
+//                psMessage = "Invalid Delivery Date.";
+//                return false;
+//            }
+//        }
+//        LocalDate ldDlvryDte = LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
+//        LocalDate ldTranDte = LocalDate.of(poEntity.getTransactDte().getYear(), poEntity.getTransactDte().getMonth(), poEntity.getTransactDte().getDay());
+//        if (ldDlvryDte.isBefore(ldTranDte)) {
+//                psMessage = "Delivery Date cannot be before the transaction date.";
+//                return false;
+//        
+
         Date date = (Date) poEntity.getDelvryDt();
-        if(date == null){
+        if (date == null) {
             psMessage = "Invalid Delivery Date.";
             return false;
         } else {
-            if("1900-01-01".equals(xsDateShort(date))){
+            if ("1900-01-01".equals(xsDateShort(date))) {
                 psMessage = "Invalid Delivery Date.";
                 return false;
             }
         }
-        LocalDate ldDlvryDte = LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
-        LocalDate ldTranDte = LocalDate.of(poEntity.getTransactDte().getYear(), poEntity.getTransactDte().getMonth(), poEntity.getTransactDte().getDay());
+        
+        // Convert java.util.Date to java.time.LocalDate
+        LocalDate ldDlvryDte = Instant.ofEpochMilli(date.getTime())
+                                      .atZone(ZoneId.systemDefault())
+                                      .toLocalDate();
+
+        // Convert transaction date to LocalDate
+        Date transactDate = poEntity.getTransactDte();
+        LocalDate ldTranDte = Instant.ofEpochMilli(transactDate.getTime())
+                                     .atZone(ZoneId.systemDefault())
+                                     .toLocalDate();
+
+        // Check if delivery date is before transaction date
         if (ldDlvryDte.isBefore(ldTranDte)) {
-                psMessage = "Delivery Date cannot be before the transaction date.";
-                return false;
+            psMessage = "Delivery Date cannot be before the transaction date.";
+            return false;
         }
         
         if (poEntity.getTranTotl().equals(new BigDecimal("0.00")) || poEntity.getTranTotl() == null){

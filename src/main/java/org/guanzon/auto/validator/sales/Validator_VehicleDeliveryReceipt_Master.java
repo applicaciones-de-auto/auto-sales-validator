@@ -128,25 +128,27 @@ public class Validator_VehicleDeliveryReceipt_Master implements ValidatorInterfa
             
         }
         
-//        try {
-//            String lsID = "";
-//            String lsSQL = poEntity.getSQL();
-//
-//            lsSQL = MiscUtil.addCondition(lsSQL, " a.sApplicNo = " + SQLUtil.toSQL(poEntity.getApplicNo())
-//                                                    +" AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo())) ;
-//            System.out.println("EXISTING BANK APPLICATION CHECK: " + lsSQL);
-//            ResultSet loRS = poGRider.executeQuery(lsSQL);
-//
-//            if (MiscUtil.RecordCount(loRS) > 0){
-//                    while(loRS.next()){
-//                        lsID = loRS.getString("sApplicNo");
-//                    }
-//
-//                    MiscUtil.close(loRS);
-//                    psMessage = "Existing Bank Application Number. Saving aborted." ;
-//                    return false;
-//            } 
-//            
+        try {
+            String lsID = "";
+            String lsSQL = poEntity.getSQL();
+            //Validate exisitng DR of VSP
+            if(poEntity.getCustType().equals("0")){
+                lsSQL = MiscUtil.addCondition(lsSQL, " a.sSourceNo = " + SQLUtil.toSQL(poEntity.getSourceNo())
+                                                        +" AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo())) ;
+                System.out.println("EXISTING VDR FOR VSP CHECK: " + lsSQL);
+                ResultSet loRS = poGRider.executeQuery(lsSQL);
+
+                if (MiscUtil.RecordCount(loRS) > 0){
+                        while(loRS.next()){
+                            lsID = loRS.getString("sReferNox");
+                        }
+
+                        MiscUtil.close(loRS);
+                        psMessage = "Found existing DR for VSP.\n\nSaving aborted." ;
+                        return false;
+                } 
+            }
+            
 //            if(poEntity.getCancelld() != null){
 //                if(poEntity.getCancelld().trim().isEmpty()){
 //                    lsID = "";
@@ -171,9 +173,9 @@ public class Validator_VehicleDeliveryReceipt_Master implements ValidatorInterfa
 //                    }  
 //                }
 //            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Validator_VehicleDeliveryReceipt_Master.class.getName()).log(Level.SEVERE, null, ex);
-//        } 
+        } catch (SQLException ex) {
+            Logger.getLogger(Validator_VehicleDeliveryReceipt_Master.class.getName()).log(Level.SEVERE, null, ex);
+        } 
         
         return true;
     }
