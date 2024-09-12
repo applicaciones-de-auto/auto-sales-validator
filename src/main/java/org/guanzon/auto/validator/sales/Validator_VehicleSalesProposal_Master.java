@@ -533,7 +533,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 lsDesc = "";
                 if (poEntity.getGatePsNo()!= null){
                     if (!poEntity.getGatePsNo().trim().isEmpty()){
-                        psMessage = "Found an existing job order record."
+                        psMessage = "Found an existing gatepass."
                                     + "\n\n<Gatepass No:" + lsID + ">"
                                     + "\n\nCancellation aborted.";
                         return false;
@@ -562,7 +562,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
 
                     MiscUtil.close(loRS);
 
-                    psMessage = "Found an existing gatepass record."
+                    psMessage = "Found an existing gatepass."
                                 + "\n\n<Gatepass No:" + lsID + ">"
                                 + "\n<Gatepass Date:" + lsDesc + ">"
                                 + "\n\nCancellation aborted.";
@@ -573,7 +573,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 if (poEntity.getJONo()!= null){
                     if (!poEntity.getJONo().trim().isEmpty()){
                         psMessage = "Found an existing job order record."
-                                    + "\n\n<JO No:" + lsID + ">"
+                                    + "\n\n<JO No:" + poEntity.getJONo() + ">"
                                     + "\n\nCancellation aborted.";
                         return false;
                     }
