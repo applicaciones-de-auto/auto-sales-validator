@@ -104,17 +104,17 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
-        if(poEntity.getUnitPrce().compareTo((new BigDecimal("0.00"))) > 0){
-            if(poEntity.getSerialID()== null) {
-                psMessage = "Vehicle Serial is not set.";
-                return false;
-            } else {
-                if (poEntity.getSerialID().trim().isEmpty()){
-                    psMessage = "Vehicle Serial is not set.";
-                    return false;
-                }
-            }
-        }
+//        if(poEntity.getUnitPrce().compareTo((new BigDecimal("0.00"))) > 0){
+//            if(poEntity.getSerialID()== null) {
+//                psMessage = "Vehicle Serial is not set.";
+//                return false;
+//            } else {
+//                if (poEntity.getSerialID().trim().isEmpty()){
+//                    psMessage = "Vehicle Serial is not set.";
+//                    return false;
+//                }
+//            }
+//        }
         
 //        Date date = (Date) poEntity.getDelvryDt();
 //        if(date == null){
