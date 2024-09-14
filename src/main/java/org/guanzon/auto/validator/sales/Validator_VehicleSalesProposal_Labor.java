@@ -77,15 +77,17 @@ public class Validator_VehicleSalesProposal_Labor implements ValidatorInterface 
             //TODO
             BigDecimal ldblAmt = new BigDecimal("0.00");
             BigDecimal ldblDsc = new BigDecimal("0.00");
-            ldblAmt = new BigDecimal(String.valueOf(poEntity.getLaborAmt()));
-            ldblDsc = new BigDecimal(String.valueOf(poEntity.getLaborDscount()));
+            ldblAmt = new BigDecimal(String.valueOf(poEntity.getNtLabAmt().setScale(2, BigDecimal.ROUND_HALF_UP)));
+            ldblDsc = new BigDecimal(String.valueOf(poEntity.getLaborDscount().setScale(2, BigDecimal.ROUND_HALF_UP)));
             if(poEntity.getChrgeTyp().equals("0")){
-                if (!ldblAmt.equals(ldblDsc)) {
+                if (ldblAmt.compareTo(BigDecimal.ZERO) != 0) {
+                //if (ldblAmt == ldblDsc) {
                     psMessage = "Invalid Labor Amount on for labor " + poEntity.getLaborDsc() + ". Charge type is FOC.";
                     return false;
                 }
             } else {
-                if (ldblAmt.equals(ldblDsc)) {
+                if (ldblAmt.compareTo(BigDecimal.ZERO) == 0) {
+//                if (ldblAmt == ldblDsc) {
                     psMessage = "Invalid Labor Amount on for labor " + poEntity.getLaborDsc() + ". Charge type is not FOC.";
                     return false;
                 }

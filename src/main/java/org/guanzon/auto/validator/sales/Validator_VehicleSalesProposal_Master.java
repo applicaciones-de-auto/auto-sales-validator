@@ -467,7 +467,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     + " , cPayModex "          
                     + " , cCustGrpx "          
                     + " FROM customer_inquiry ";
-            lsSQL = MiscUtil.addCondition(lsSQL, " sTransNox = " + SQLUtil.toSQL(poEntity.getInqryID()) 
+            lsSQL = MiscUtil.addCondition(lsSQL, " sTransNox = " + SQLUtil.toSQL(poEntity.getInqTran()) 
                                                     + " AND cPayModex <> " + SQLUtil.toSQL(poEntity.getPayMode())
                                                     );
             System.out.println("EXISTING INQUIRY PAYMENT MODE VS VSP PAYMENT MODE CHECK: " + lsSQL);

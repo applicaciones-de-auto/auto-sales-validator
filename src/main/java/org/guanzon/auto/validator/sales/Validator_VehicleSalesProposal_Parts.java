@@ -76,16 +76,20 @@ public class Validator_VehicleSalesProposal_Parts implements ValidatorInterface 
         } else {
             BigDecimal ldblAmt = new BigDecimal("0.00");
             BigDecimal ldblDsc = new BigDecimal("0.00");
-            ldblAmt = new BigDecimal(String.valueOf(poEntity.getSelPrice()));
-            ldblDsc = new BigDecimal(String.valueOf(poEntity.getPartsDscount()));
+            //ldblAmt = new BigDecimal(String.valueOf(poEntity.getSelPrice().setScale(2, BigDecimal.ROUND_HALF_UP)));
+            ldblAmt = new BigDecimal(String.valueOf(poEntity.getNtPrtAmt().setScale(2, BigDecimal.ROUND_HALF_UP)));
+            ldblDsc = new BigDecimal(String.valueOf(poEntity.getPartsDscount().setScale(2, BigDecimal.ROUND_HALF_UP)));
             if(poEntity.getChrgeTyp().equals("0")){
-                if (!ldblAmt.equals(ldblDsc)) {
-                    psMessage = "Invalid Parts Amount on for parts " + poEntity.getDescript()+ ". Charge type is FOC.";
+//                if (!ldblAmt.equals(ldblDsc)) {
+                //if (ldblAmt != ldblDsc) {
+                if (ldblAmt.compareTo(BigDecimal.ZERO) != 0) {
+                    psMessage = "Invalid Net Parts Amount for parts " + poEntity.getDescript()+ ". Charge type is FOC.";
                     return false;
                 }
             } else {
-                if (ldblAmt.equals(ldblDsc)) {
-                    psMessage = "Invalid Parts Amount on for parts " + poEntity.getDescript() + ". Charge type is not FOC.";
+                //if (ldblAmt == ldblDsc) {
+                if (ldblAmt.compareTo(BigDecimal.ZERO) == 0) {
+                    psMessage = "Invalid Parts Amount for parts " + poEntity.getDescript() + ". Charge type is not FOC.";
                     return false;
                 }
 
