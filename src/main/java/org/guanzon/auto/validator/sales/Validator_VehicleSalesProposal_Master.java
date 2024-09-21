@@ -104,17 +104,17 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
-        if(poEntity.getUnitPrce().compareTo((new BigDecimal("0.00"))) > 0){
-            if(poEntity.getSerialID()== null) {
-                psMessage = "Vehicle Serial is not set.";
-                return false;
-            } else {
-                if (poEntity.getSerialID().trim().isEmpty()){
-                    psMessage = "Vehicle Serial is not set.";
-                    return false;
-                }
-            }
-        }
+//        if(poEntity.getUnitPrce().compareTo((new BigDecimal("0.00"))) > 0){
+//            if(poEntity.getSerialID()== null) {
+//                psMessage = "Vehicle Serial is not set.";
+//                return false;
+//            } else {
+//                if (poEntity.getSerialID().trim().isEmpty()){
+//                    psMessage = "Vehicle Serial is not set.";
+//                    return false;
+//                }
+//            }
+//        }
         
 //        Date date = (Date) poEntity.getDelvryDt();
 //        if(date == null){
@@ -467,7 +467,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                     + " , cPayModex "          
                     + " , cCustGrpx "          
                     + " FROM customer_inquiry ";
-            lsSQL = MiscUtil.addCondition(lsSQL, " sTransNox = " + SQLUtil.toSQL(poEntity.getInqryID()) 
+            lsSQL = MiscUtil.addCondition(lsSQL, " sTransNox = " + SQLUtil.toSQL(poEntity.getInqTran()) 
                                                     + " AND cPayModex <> " + SQLUtil.toSQL(poEntity.getPayMode())
                                                     );
             System.out.println("EXISTING INQUIRY PAYMENT MODE VS VSP PAYMENT MODE CHECK: " + lsSQL);
@@ -533,7 +533,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 lsDesc = "";
                 if (poEntity.getGatePsNo()!= null){
                     if (!poEntity.getGatePsNo().trim().isEmpty()){
-                        psMessage = "Found an existing job order record."
+                        psMessage = "Found an existing gatepass."
                                     + "\n\n<Gatepass No:" + lsID + ">"
                                     + "\n\nCancellation aborted.";
                         return false;
@@ -562,7 +562,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
 
                     MiscUtil.close(loRS);
 
-                    psMessage = "Found an existing gatepass record."
+                    psMessage = "Found an existing gatepass."
                                 + "\n\n<Gatepass No:" + lsID + ">"
                                 + "\n<Gatepass Date:" + lsDesc + ">"
                                 + "\n\nCancellation aborted.";
@@ -573,7 +573,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 if (poEntity.getJONo()!= null){
                     if (!poEntity.getJONo().trim().isEmpty()){
                         psMessage = "Found an existing job order record."
-                                    + "\n\n<JO No:" + lsID + ">"
+                                    + "\n\n<JO No:" + poEntity.getJONo() + ">"
                                     + "\n\nCancellation aborted.";
                         return false;
                     }

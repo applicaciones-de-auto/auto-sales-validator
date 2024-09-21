@@ -134,7 +134,8 @@ public class Validator_VehicleDeliveryReceipt_Master implements ValidatorInterfa
             //Validate exisitng DR of VSP
             if(poEntity.getCustType().equals("0")){
                 lsSQL = MiscUtil.addCondition(lsSQL, " a.sSourceNo = " + SQLUtil.toSQL(poEntity.getSourceNo())
-                                                        +" AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo())) ;
+                                                        +" AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo()))
+                                                        +" AND a.cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) ;
                 System.out.println("EXISTING VDR FOR VSP CHECK: " + lsSQL);
                 ResultSet loRS = poGRider.executeQuery(lsSQL);
 
