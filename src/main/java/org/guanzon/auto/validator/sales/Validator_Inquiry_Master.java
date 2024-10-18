@@ -201,6 +201,28 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
             }
         }
         
+        if(!poEntity.getTranStat().equals("0")) {
+            if(poEntity.getPayMode() == null) {
+                psMessage = "Payment mode is not set.";
+                return false;
+            } else {
+                if (poEntity.getPayMode().trim().isEmpty()){
+                    psMessage = "Payment mode is not set.";
+                    return false;
+                }
+            }
+            
+            if(poEntity.getCustGrp() == null) {
+                psMessage = "Customer Type is not set.";
+                return false;
+            } else {
+                if (poEntity.getCustGrp().trim().isEmpty()){
+                    psMessage = "Customer Type is not set.";
+                    return false;
+                }
+            }
+        } 
+        
         try {
             String lsID = "";
             String lsDesc = "";

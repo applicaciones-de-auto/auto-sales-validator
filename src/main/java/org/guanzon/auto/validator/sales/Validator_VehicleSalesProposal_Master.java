@@ -534,7 +534,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 if (poEntity.getGatePsNo()!= null){
                     if (!poEntity.getGatePsNo().trim().isEmpty()){
                         psMessage = "Found an existing gatepass."
-                                    + "\n\n<Gatepass No:" + lsID + ">"
+                                    + "\n\n<Gatepass No:" + poEntity.getGatePsNo() + ">"
                                     + "\n\nCancellation aborted.";
                         return false;
                     }
