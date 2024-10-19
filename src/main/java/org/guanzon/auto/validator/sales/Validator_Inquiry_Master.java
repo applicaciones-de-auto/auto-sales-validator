@@ -200,7 +200,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                 return false;
             }
         }
-        
+        // && !poEntity.getTranStat().equals("6")
         if(!poEntity.getTranStat().equals("0")) {
             if(poEntity.getPayMode() == null) {
                 psMessage = "Payment mode is not set.";
@@ -253,7 +253,8 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                         + " 	WHEN a.cTranStat = '1' THEN 'ON PROCESS' "                                   
                         + " 	WHEN a.cTranStat = '2' THEN 'LOST SALE'  "                                   
                         + " 	WHEN a.cTranStat = '3' THEN 'WITH VSP'   "                                   
-                        + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                     
+                        + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                   
+                        + " 	WHEN a.cTranStat = '6' THEN 'FOR APPROVAL' "                                    
                         + " 	ELSE 'CANCELLED'  "                                                          
                         + "    END AS sTranStat "                                                          
                         + "  , b.sCompnyNm      "                                                          
