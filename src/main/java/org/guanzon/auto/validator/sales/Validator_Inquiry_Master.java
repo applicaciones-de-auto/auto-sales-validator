@@ -248,6 +248,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                         + "  , a.sAgentIDx "                                                               
                         + "  , a.dTargetDt "                                                               
                         + "  , a.cTranStat "                                                               
+                        + "  , a.dLastUpdt "                                                               
                         + "  , CASE "
                         + "     WHEN a.cTranStat = '0' THEN 'FOR FOLLOW-UP'"                           
                         + " 	WHEN a.cTranStat = '1' THEN 'ON PROCESS' "                                   
