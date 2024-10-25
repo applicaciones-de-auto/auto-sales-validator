@@ -416,6 +416,24 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
             }
         }
         
+        //DO NOT allow care of bank when payment mode is CASH
+        if(poEntity.getPayMode().equals("0")){
+            if(poEntity.getChmoStat().equals("3")){
+                psMessage = "Invalid CHMO status.";
+                return false;
+            }
+            
+            if(poEntity.getTPLStat().equals("4")){
+                psMessage = "Invalid insurance TPL status.";
+                return false;
+            }
+            
+            if(poEntity.getCompStat().equals("4")){
+                psMessage = "Invalid insurance comprehensive status.";
+                return false;
+            }
+        }
+        
         try {
             String lsID = "";
             String lsType = "";
