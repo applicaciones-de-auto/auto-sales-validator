@@ -174,10 +174,10 @@ public class Validator_Activity_Master implements ValidatorInterface {
                 return false;
             } 
             
-            if (poEntity.getValue("dApproved") == null){
-                psMessage = "Invalid Approval Date.";
-                return false;
-            } 
+//            if (poEntity.getValue("dApproved") == null){
+//                psMessage = "Invalid Approval Date.";
+//                return false;
+//            } 
             
             String lsdate = "1900-01-01";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

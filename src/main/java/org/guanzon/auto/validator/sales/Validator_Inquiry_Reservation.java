@@ -5,7 +5,14 @@
  */
 package org.guanzon.auto.validator.sales;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.guanzon.appdriver.base.GRider;
+import org.guanzon.appdriver.base.MiscUtil;
+import org.guanzon.appdriver.base.SQLUtil;
+import org.guanzon.appdriver.constant.TransactionStatus;
 import org.guanzon.auto.model.sales.Model_Inquiry_Reservation;
 
 /**
@@ -68,7 +75,7 @@ public class Validator_Inquiry_Reservation implements ValidatorInterface {
                 return false;
             }
         }
-
+        
         return true;
     }
 

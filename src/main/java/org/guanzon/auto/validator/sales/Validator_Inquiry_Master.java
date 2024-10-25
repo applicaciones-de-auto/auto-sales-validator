@@ -200,6 +200,28 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                 return false;
             }
         }
+        // && !poEntity.getTranStat().equals("6")
+        if(!poEntity.getTranStat().equals("0")) {
+            if(poEntity.getPayMode() == null) {
+                psMessage = "Payment mode is not set.";
+                return false;
+            } else {
+                if (poEntity.getPayMode().trim().isEmpty()){
+                    psMessage = "Payment mode is not set.";
+                    return false;
+                }
+            }
+            
+            if(poEntity.getCustGrp() == null) {
+                psMessage = "Customer Type is not set.";
+                return false;
+            } else {
+                if (poEntity.getCustGrp().trim().isEmpty()){
+                    psMessage = "Customer Type is not set.";
+                    return false;
+                }
+            }
+        } 
         
         try {
             String lsID = "";
@@ -226,12 +248,14 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                         + "  , a.sAgentIDx "                                                               
                         + "  , a.dTargetDt "                                                               
                         + "  , a.cTranStat "                                                               
+                        + "  , a.dLastUpdt "                                                               
                         + "  , CASE "
                         + "     WHEN a.cTranStat = '0' THEN 'FOR FOLLOW-UP'"                           
                         + " 	WHEN a.cTranStat = '1' THEN 'ON PROCESS' "                                   
                         + " 	WHEN a.cTranStat = '2' THEN 'LOST SALE'  "                                   
                         + " 	WHEN a.cTranStat = '3' THEN 'WITH VSP'   "                                   
-                        + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                     
+                        + " 	WHEN a.cTranStat = '4' THEN 'SOLD'       "                                   
+                        + " 	WHEN a.cTranStat = '6' THEN 'FOR APPROVAL' "                                    
                         + " 	ELSE 'CANCELLED'  "                                                          
                         + "    END AS sTranStat "                                                          
                         + "  , b.sCompnyNm      "                                                          
@@ -262,7 +286,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                 */
                 lsWhere = MiscUtil.addCondition(lsSQL, " a.sEmployID = " + SQLUtil.toSQL(poEntity.getEmployID()) 
                                                         //+ " AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo()) 
-                                                        + " AND (a.cTranStat = '1' OR a.cTranStat = '3')"  //a.cTranStat = '0' OR 
+                                                        + " AND (a.cTranStat = '1' OR a.cTranStat = '3' OR a.cTranStat = '6')"  //a.cTranStat = '0' OR 
                                                         );
                 
                 System.out.println("EXISTING ONPROCESS/WITH VSP INQUIRY WITH SAME SE CHECK: " + lsSQL);
@@ -313,7 +337,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                 lsWhere = MiscUtil.addCondition(lsSQL, " a.sClientID = " + SQLUtil.toSQL(poEntity.getClientID())
                                                         + " AND a.sEmployID = " + SQLUtil.toSQL(poEntity.getEmployID()) 
                                                         + " AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo()) 
-                                                        + " AND (a.cTranStat = '0' OR a.cTranStat = '1' OR a.cTranStat = '3')"  
+                                                        + " AND (a.cTranStat = '0' OR a.cTranStat = '1' OR a.cTranStat = '3' OR a.cTranStat = '6')"  
                                                         );
                 
                 System.out.println("EXISTING CUSTOMER WITH THE SAME SE CHECK: " + lsSQL);
@@ -366,7 +390,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                 lsWhere = MiscUtil.addCondition(lsSQL, " a.sClientID = " + SQLUtil.toSQL(poEntity.getClientID()) 
                                                         + " AND a.sEmployID <> " + SQLUtil.toSQL(poEntity.getEmployID()) 
                                                         + " AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo()) 
-                                                        + " AND (a.cTranStat = '1' OR a.cTranStat = '3')" 
+                                                        + " AND (a.cTranStat = '1' OR a.cTranStat = '3' OR a.cTranStat = '6')" 
                                                         );
                 
                 System.out.println("EXISTING INQUIRY ON PROCESS AND WITH VSP WITH SAME CUSTOMER CHECK: " + lsWhere);
@@ -418,7 +442,7 @@ public class Validator_Inquiry_Master implements ValidatorInterface {
                 //Allow to be re-used if the allowable days to be re-used is meet
                 lsWhere = MiscUtil.addCondition(lsSQL, " a.sClientID = " + SQLUtil.toSQL(poEntity.getClientID()) 
                                                         + " AND a.sTransNox <> " + SQLUtil.toSQL(poEntity.getTransNo())  
-                                                        + " AND (a.cTranStat = '0')" 
+                                                        + " AND (a.cTranStat = '0' OR a.cTranStat = '6')" 
                                                         );
                 
                 System.out.println("EXISTING FOR FOLLOW-UP INQUIRY WITH SAME CUSTOMER CHECK: " + lsWhere);
