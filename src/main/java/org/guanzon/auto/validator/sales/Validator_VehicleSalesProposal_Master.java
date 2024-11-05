@@ -246,7 +246,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 switch(poEntity.getTPLStat()){
                     case "1": //FOC
                         if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) > 0)){
-                            psMessage = "Invalid TPL Insurance Type.";
+                            psMessage = "Invalid TPL Insurance Amount.";
                             return false;
                         }
                     case "3": //C/O DEALER
@@ -262,7 +262,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
 
                         if(poEntity.getTPLStat().equals("3")){
                             if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) <= 0)){
-                                psMessage = "Invalid TPL Insurance Type.";
+                                psMessage = "Invalid TPL Insurance Amount.";
                                 return false;
                             }
                         }
@@ -329,13 +329,13 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             }
                         }
                         
-                        if (!poEntity.getCompStat().equals("1")){ //FREE
-                            if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                        if (poEntity.getInsurTyp().equals("0") || poEntity.getInsurTyp().equals("1")){ //NONE / FREE
+                            if ((poEntity.getCompAmt().compareTo(new BigDecimal(0.00)) > 0)){
                                 psMessage = "Invalid Comprehensive Insurance Amount.";
                                 return false;
                             }
                         } else {
-                            if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) < 0)){
+                            if ((poEntity.getCompAmt().compareTo(new BigDecimal(0.00)) <= 0)){
                                 psMessage = "Invalid Comprehensive Insurance Amount.";
                                 return false;
                             }
@@ -355,7 +355,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         }
                         
-                        if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                        if ((poEntity.getCompAmt().compareTo(new BigDecimal(0.00)) > 0)){
                             psMessage = "Invalid Comprehensive Insurance Amount.";
                             return false;
                         }
