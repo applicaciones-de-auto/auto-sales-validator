@@ -314,7 +314,11 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         } else {
                             if (poEntity.getInsurTyp().trim().isEmpty()){
-                                psMessage = "Comprehensive Insurance type  is not set.";
+                                psMessage = "Comprehensive Insurance type is not set.";
+                                return false;
+                            }
+                            if (poEntity.getInsurTyp().equals("0")){
+                                psMessage = "Invalid Comprehensive Insurance type.";
                                 return false;
                             }
                         }
