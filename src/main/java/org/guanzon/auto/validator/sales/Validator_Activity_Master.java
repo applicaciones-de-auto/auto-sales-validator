@@ -9,8 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
+import org.guanzon.appdriver.constant.EditMode;
+import org.guanzon.appdriver.constant.TransactionStatus;
 import org.guanzon.auto.model.sales.Model_Activity_Master;
 
 /**
@@ -216,6 +220,21 @@ public class Validator_Activity_Master implements ValidatorInterface {
             LocalDate ldteFrom = strToDate(xsDateShort((Date) poEntity.getValue("dDateFrom")));
             LocalDate ldteThru =  strToDate(xsDateShort((Date) poEntity.getValue("dDateThru")));
             Period age = Period.between(ldteFrom, ldteThru);
+            
+            
+            if(poEntity.getEditMode() == EditMode.ADDNEW){
+                Date transactDate = poGRider.getServerDate();
+                LocalDate ldCurrentDte = Instant.ofEpochMilli(transactDate.getTime())
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDate();
+            
+                // Check if delivery date is before transaction date
+                if (ldteFrom.isBefore(ldCurrentDte)) {
+                    psMessage = "Activity start date cannot be before the current date.";
+                    return false;
+                }
+            }
+            
             if(age.getDays() < 0){
                 psMessage = "Invalid Activity Date.";
                 return false;
@@ -251,8 +270,8 @@ public class Validator_Activity_Master implements ValidatorInterface {
                                                     " AND a.sActTypID = " + SQLUtil.toSQL(poEntity.getActTypID()) +
                                                     " AND a.dDateFrom = " + SQLUtil.toSQL(xsDateShort((Date) poEntity.getValue("dDateFrom")))+
                                                     " AND a.dDateThru = " + SQLUtil.toSQL(xsDateShort((Date) poEntity.getValue("dDateThru")))+
-                                                    " AND a.sLocation = " + SQLUtil.toSQL(poEntity.getLocation())+
-                                                    " AND a.cTranStat = '1' " +
+                                                    " AND a.sLocation = " + SQLUtil.toSQL(poEntity.getLocation()) +
+                                                    " AND a.cTranStat <> " + SQLUtil.toSQL( TransactionStatus.STATE_CANCELLED) + // '1'
                                                     " AND a.sActvtyID <> " + SQLUtil.toSQL(poEntity.getActvtyID()) ;
             System.out.println("EXISTING ACTIVITY CHECK: " + lsSQL);
             ResultSet loRS = poGRider.executeQuery(lsSQL);

@@ -246,7 +246,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 switch(poEntity.getTPLStat()){
                     case "1": //FOC
                         if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) > 0)){
-                            psMessage = "Invalid TPL Insurance Type.";
+                            psMessage = "Invalid TPL Insurance Amount.";
                             return false;
                         }
                     case "3": //C/O DEALER
@@ -262,7 +262,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
 
                         if(poEntity.getTPLStat().equals("3")){
                             if ((poEntity.getTPLAmt().compareTo(new BigDecimal(0.00)) <= 0)){
-                                psMessage = "Invalid TPL Insurance Type.";
+                                psMessage = "Invalid TPL Insurance Amount.";
                                 return false;
                             }
                         }
@@ -314,7 +314,11 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         } else {
                             if (poEntity.getInsurTyp().trim().isEmpty()){
-                                psMessage = "Comprehensive Insurance type  is not set.";
+                                psMessage = "Comprehensive Insurance type is not set.";
+                                return false;
+                            }
+                            if (poEntity.getInsurTyp().equals("0")){
+                                psMessage = "Invalid Comprehensive Insurance type.";
                                 return false;
                             }
                         }
@@ -329,13 +333,13 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             }
                         }
                         
-                        if (!poEntity.getCompStat().equals("1")){ //FREE
-                            if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                        if (poEntity.getInsurTyp().equals("0") || poEntity.getInsurTyp().equals("1")){ //NONE / FREE
+                            if ((poEntity.getCompAmt().compareTo(new BigDecimal(0.00)) > 0)){
                                 psMessage = "Invalid Comprehensive Insurance Amount.";
                                 return false;
                             }
                         } else {
-                            if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) < 0)){
+                            if ((poEntity.getCompAmt().compareTo(new BigDecimal(0.00)) <= 0)){
                                 psMessage = "Invalid Comprehensive Insurance Amount.";
                                 return false;
                             }
@@ -355,7 +359,7 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                             return false;
                         }
                         
-                        if ((poEntity.getInsurAmt().compareTo(new BigDecimal(0.00)) > 0)){
+                        if ((poEntity.getCompAmt().compareTo(new BigDecimal(0.00)) > 0)){
                             psMessage = "Invalid Comprehensive Insurance Amount.";
                             return false;
                         }
@@ -675,19 +679,28 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 lsID = "";
                 lsDesc = "";
                 lsType = "";
-                lsSQL =   " SELECT "                                             
-                        + "   a.sTransNox "                                     
-                        + " , a.sReferNox "                                     
-                        + " , a.sSourceCD "                                     
-                        + " , a.sSourceNo "                                     
-                        + " , a.sTranType "                                     
-                        + " , b.sReferNox AS sSINoxxxx "                        
-                        + " , b.dTransact "                      
-                        + " , b.cTranStat  "                                  
-                        + " FROM si_master_source a "                           
-                        + " LEFT JOIN si_master b ON b.sTransNox = a.sTransNox ";
-                lsSQL = MiscUtil.addCondition(lsSQL, " b.cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
-                                                    + " AND a.sReferNox = " + SQLUtil.toSQL(poEntity.getTransNo()) 
+//                lsSQL =   " SELECT "                                             
+//                        + "   a.sTransNox "                                     
+//                        + " , a.sReferNox "                                     
+//                        + " , a.sSourceCD "                                     
+//                        + " , a.sSourceNo "                                     
+//                        + " , a.sTranType "                                     
+//                        + " , b.sReferNox AS sSINoxxxx "                        
+//                        + " , b.dTransact "                      
+//                        + " , b.cTranStat  "                                  
+//                        + " FROM si_master_source a "                           
+//                        + " LEFT JOIN si_master b ON b.sTransNox = a.sTransNox ";
+                
+                lsSQL = " SELECT "                                                    
+                        + "   a.sTransNox "                                             
+                        + " , a.sReferNox AS sSINoxxxx"                                             
+                        + " , DATE(a.dTransact) AS dTransact "                          
+                        + " FROM si_master a "                                          
+                        + " LEFT JOIN si_master_source b ON b.sReferNox = a.sTransNox " 
+                        + " LEFT JOIN cashier_receivables c ON c.sTransNox = b.sSourceNo " ;    
+                
+                lsSQL = MiscUtil.addCondition(lsSQL, " a.cTranStat <> " + SQLUtil.toSQL(TransactionStatus.STATE_CANCELLED) 
+                                                    + " AND c.sReferNox = " + SQLUtil.toSQL(poEntity.getTransNo()) 
                                                     );
                 System.out.println("EXISTING PAYMENT CHECK: " + lsSQL);
                 loRS = poGRider.executeQuery(lsSQL);
