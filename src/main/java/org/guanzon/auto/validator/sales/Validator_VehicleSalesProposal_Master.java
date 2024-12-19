@@ -22,6 +22,7 @@ import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.TransactionStatus;
 import org.guanzon.auto.model.sales.Model_VehicleSalesProposal_Master;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -692,7 +693,8 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
 //                        + " LEFT JOIN si_master b ON b.sTransNox = a.sTransNox ";
                 
                 lsSQL = " SELECT "                                                    
-                        + "   a.sTransNox "                                             
+                        + "   a.sTransNox "      
+                        + " ,  IF(a.cDocTypex = '1', 'CPSI', IF(a.cDocTypex = '2', 'OR', IF(a.cDocTypex = '3' OR a.cDocTypex = '6', 'BSI',  IF(a.cDocTypex = '4', 'CR', IF(a.cDocTypex = '5', 'PSI', IF(a.cDocTypex = '7', 'AR', '')))))) AS cDocTypex"                                     
                         + " , a.sReferNox AS sSINoxxxx"                                             
                         + " , DATE(a.dTransact) AS dTransact "                          
                         + " FROM si_master a "                                          
@@ -708,8 +710,8 @@ public class Validator_VehicleSalesProposal_Master implements ValidatorInterface
                 if (MiscUtil.RecordCount(loRS) > 0){
                     while(loRS.next()){
                         lsID = loRS.getString("sSINoxxxx");
-                        lsType = loRS.getString("sTranType"); //TODO
-                        lsDesc = xsDateShort(loRS.getDate("dTransact"));
+                        lsType = loRS.getString("cDocTypex"); 
+                        lsDesc = loRS.getString("dTransact");
                     }
 
                     MiscUtil.close(loRS);
